@@ -1,0 +1,29 @@
+{
+  "name": "docker-host-etc-hosts",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "atomic-write": "^0.1.1",
+    "docker-events": "^0.0.2",
+    "dockerode": "^2.5.3",
+    "lodash": "^4.17.4"
+  },
+  "scripts": {
+    "dev": "nodemon src/index.js --exec babel-node",
+    "compile": "babel src -d lib",
+    "test": "jest",
+    "lint": "eslint src",
+    "coverage": "jest --coverage",
+    "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.2",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.11.0",
+    "jest": "^21.2.1",
+    "nodemon": "^1.12.1"
+  }
+}
