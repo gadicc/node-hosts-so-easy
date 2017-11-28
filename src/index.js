@@ -2,6 +2,7 @@ import fs from 'fs';
 
 import atomicWrite from 'atomic-write';
 import debounce from 'lodash/debounce';
+import EventEmitter from 'eventemitter3';
 
 const win = process.env === 'win32';
 const DEFAULT_EOL = win ? '\r\n' : '\n';
@@ -13,15 +14,18 @@ function arrayJoinFunc(arr, separatorFunc) {
   ).join('');
 }
 
-class Hosts {
+class Hosts extends EventEmitter {
 
   /* --- PUBLIC API --- */
 
   constructor(options) {
+    super();
+
     this.writeInProgress = false;
     this.queue = { add: {}, remove: {}, removeHost: {} };
+    this.hostsFile = {};
 
-    this.config = {
+    const config = this.config = {
       atomicWrites: true,
       debounceTime: 500,
       hostsFile: DEFAULT_HOSTS,
@@ -31,20 +35,20 @@ class Hosts {
 
     if (options) {
       for (const key in options) {
-        if (typeof this.config[key] !== 'undefined')
-          this.config[key] = options[key];
+        if (typeof config[key] !== 'undefined')
+          config[key] = options[key];
         else
           throw new Error("No such config option: " + key);
       }
     }
 
-    this.writeFile = this.config.atomicWrites
+    this.writeFile = config.atomicWrites
       ? atomicWrite.writeFile.bind(atomicWrite)
       : fs.writeFile.bind(fs);
 
     this.queueWrite = this.noWrites
       ? function() {}
-      : debounce(this.write, this.config.debounceTime);
+      : debounce(this._write, config.debounceTime);
   }
 
   add(ip, host) {
@@ -90,6 +94,13 @@ class Hosts {
     this.queue.add = {};
     this.queue.remove = {};
     this.queue.removeHost = {};
+  }
+
+  postWrite() {
+    return new Promise((resolve, reject) => {
+      // Ok for now, could handle reject with a bit more effort.
+      this.once('writeSuccess', resolve);
+    });
   }
 
   /* --- INTERNAL API --- */
@@ -148,26 +159,40 @@ class Hosts {
 
   /* --- FILE MANAGEMENT (INTERNAL) --- */
 
-  write() {
+  _writeContents(contents) {
+    this.writeFile(this.config.hostsFile, contents, err => {
+      if (err)
+        throw err;
+      this.writeInProgress = false;
+      this.emit('writeSuccess');
+    });
+  }
+
+  _write() {
     if (this.writeInProgress)
       return this.queueWrite();
 
     this.writeInProgress = true;
+    this.emit('writeStart');
 
-    // TODO, cache & stat to invalidate
-    fs.readFile(this.config.hostsFile, (err, file) => {
-      if (err) {
-        console.warn(err);
-        console.warn('Creating empty hosts file');
-        file = '';
+    // Check if file has changed to avoid unnecessary reread.
+    fs.stat(this.config.hostsFile, (err, stats) => {
+      if (stats.ctimeMs === this.hostsFile.ctimeMs) {
+
+        this._writeContents(this.modify(this.hostsFile.raw));
+
+      } else {
+
+        this.hostsFile.ctimeMs = stats.ctimeMs;
+        fs.readFile(this.config.hostsFile, (err, file) => {
+          if (err)
+            throw err;
+
+          this.hostsFile.raw = file.toString();
+          this._writeContents(this.modify(this.hostsFile.raw));
+        });
+
       }
-
-      //atomicWrite.
-      this.writeFile(this.config.hostsFile, this.modify(file.toString()), err => {
-        if (err)
-          throw err;
-        this.writeInProgress = false;
-      });
     });
   }
 

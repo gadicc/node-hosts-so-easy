@@ -1,4 +1,13 @@
+import _fs from 'fs';
+import util from 'util';
+
+import pify from 'pify';
+import _tmp from 'tmp';
+
 import Hosts from './index';
+
+const fs = pify(_fs);
+const tmp = pify(_tmp);
 
 describe('hosts', () => {
 
@@ -78,6 +87,63 @@ describe('hosts', () => {
         expect(hosts.modify(orig)).toBe(desired);
       });
 
+    });
+
+  });
+
+  describe('config options', () => {
+
+    it('invalid options throw', () => {
+      expect(
+        () => new Hosts({ noSuchOption: true })
+      ).toThrow();
+    });
+
+  });
+
+  describe('file operations', () => {
+
+    it('write occurs and fires writeSuccess event', done => {
+      tmp.tmpName().then(filename => {
+        fs.writeFile(filename, '127.0.0.1 localhost').then(() => {
+          const hosts = new Hosts({ hostsFile: filename, debounceTime: 0, atomicWrites: false });
+          hosts.add('127.0.0.1', 'localhost2');
+          hosts.on('writeSuccess', () => {
+            fs.readFile(filename).then(output => {
+              expect(output.toString()).toBe('127.0.0.1 localhost localhost2');
+              done();
+            });
+          });
+        });
+      });
+    });
+
+    it('postWrite() returns a promise that resolves after write', async () => {
+      const filename = await tmp.tmpName();
+      await fs.writeFile(filename, '127.0.0.1 localhost');
+
+      const hosts = new Hosts({ hostsFile: filename, debounceTime: 0, atomicWrites: false });
+      hosts.add('127.0.0.1', 'localhost2');
+
+      await hosts.postWrite();
+      const output = (await fs.readFile(filename)).toString();
+      expect(output).toBe('127.0.0.1 localhost localhost2');
+    });
+
+    it('file only reread if changed', async () => {
+      const filename = await tmp.tmpName();
+      await fs.writeFile(filename, '127.0.0.1 localhost');
+
+      const hosts = new Hosts({ hostsFile: filename, debounceTime: 0, atomicWrites: false });
+      hosts.add('127.0.0.1', 'localhost2');
+      await hosts.postWrite();
+      const origCtime = hosts.hostsFile.ctimeMs;
+
+      hosts.add('127.0.0.1', 'localhost3');
+      await hosts.postWrite();
+      const postCtime = hosts.hostsFile.ctimeMs;
+
+      expect(origCtime).not.toBe(postCtime);
     });
 
   });
