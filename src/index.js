@@ -46,9 +46,9 @@ class Hosts extends EventEmitter {
       ? atomicWrite.writeFile.bind(atomicWrite)
       : fs.writeFile.bind(fs);
 
-    this.queueWrite = this.noWrites
+    this._queueUpdate = this.noWrites
       ? function() {}
-      : debounce(this._write, config.debounceTime);
+      : debounce(this._update, config.debounceTime);
   }
 
   add(ip, host) {
@@ -62,7 +62,7 @@ class Hosts extends EventEmitter {
     else
       queue.add[ip].push(host);
 
-    this.queueWrite();
+    this._queueUpdate();
   }
 
   remove(ip, host) {
@@ -82,12 +82,12 @@ class Hosts extends EventEmitter {
     else
       queue.remove[ip].push(host);
 
-    this.queueWrite();
+    this._queueUpdate();
   }
 
   removeHost(host) {
     this.queue.removeHost[host] = true;
-    this.queueWrite();
+    this._queueUpdate();
   }
 
   clearQueue() {
@@ -159,7 +159,7 @@ class Hosts extends EventEmitter {
 
   /* --- FILE MANAGEMENT (INTERNAL) --- */
 
-  _writeContents(contents) {
+  _updateContents(contents) {
     this.writeFile(this.config.hostsFile, contents, err => {
       if (err)
         throw err;
@@ -168,18 +168,19 @@ class Hosts extends EventEmitter {
     });
   }
 
-  _write() {
+  _update() {
     if (this.writeInProgress)
-      return this.queueWrite();
+      return this._queueUpdate();
 
     this.writeInProgress = true;
     this.emit('writeStart');
 
     // Check if file has changed to avoid unnecessary reread.
+    // TODO don't check if we've written since last read.
     fs.stat(this.config.hostsFile, (err, stats) => {
       if (stats.ctimeMs === this.hostsFile.ctimeMs) {
 
-        this._writeContents(this.modify(this.hostsFile.raw));
+        this._updateContents(this.modify(this.hostsFile.raw));
 
       } else {
 
@@ -189,7 +190,7 @@ class Hosts extends EventEmitter {
             throw err;
 
           this.hostsFile.raw = file.toString();
-          this._writeContents(this.modify(this.hostsFile.raw));
+          this._updateContents(this.modify(this.hostsFile.raw));
         });
 
       }

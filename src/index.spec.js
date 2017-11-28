@@ -130,20 +130,41 @@ describe('hosts', () => {
       expect(output).toBe('127.0.0.1 localhost localhost2');
     });
 
-    it('file only reread if changed', async () => {
+    it('file is reread if it has changed', async () => {
       const filename = await tmp.tmpName();
       await fs.writeFile(filename, '127.0.0.1 localhost');
 
       const hosts = new Hosts({ hostsFile: filename, debounceTime: 0, atomicWrites: false });
       hosts.add('127.0.0.1', 'localhost2');
       await hosts.postWrite();
-      const origCtime = hosts.hostsFile.ctimeMs;
+
+      // change the file "externally" (i.e. another process)
+      await fs.writeFile(filename, '127.0.0.1 localhost');
 
       hosts.add('127.0.0.1', 'localhost3');
       await hosts.postWrite();
-      const postCtime = hosts.hostsFile.ctimeMs;
 
-      expect(origCtime).not.toBe(postCtime);
+      const output = (await fs.readFile(filename)).toString();
+      expect(output).toBe('127.0.0.1 localhost localhost3');
+    });
+
+    it('file is not reread if it has not changed', async () => {
+      const filename = await tmp.tmpName();
+      await fs.writeFile(filename, '127.0.0.1 localhost FAIL');
+
+      const hosts = new Hosts({ hostsFile: filename, debounceTime: 0, atomicWrites: false });
+
+      // "Inject" the file, without using the real file contents (no FAIL host)
+      const stats = await fs.stat(filename);
+      hosts.hostsFile.ctimeMs = stats.ctimeMs;
+      hosts.hostsFile.raw = '127.0.0.1 localhost';
+
+      // This operation should not re-load the file, i.e. no "FAIL" host
+      hosts.add('127.0.0.1', 'localhost2');
+      await hosts.postWrite();
+
+      const output = (await fs.readFile(filename)).toString();
+      expect(output).toBe('127.0.0.1 localhost localhost2'); // no FAIL
     });
 
   });
