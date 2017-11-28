@@ -4,16 +4,53 @@ import atomicWrite from 'atomic-write';
 import debounce from 'lodash/debounce';
 
 const win = process.env === 'win32';
-const EOL = win ? '\r\n' : '\n';
-const HOSTS_FILE = win ? 'C:/Windows/System32/drivers/etc/hosts' : '/etc/hosts';
-//const HOSTS_FILE = 'sample_hosts';
+const DEFAULT_EOL = win ? '\r\n' : '\n';
+const DEFAULT_HOSTS = win ? 'C:/Windows/System32/drivers/etc/hosts' : '/etc/hosts';
 
-const queue = { add: {}, remove: {}, removeHost: {} };
+function arrayJoinFunc(arr, separatorFunc) {
+  return arr.map(
+    (el, i) => el + (i < arr.length-1 ? separatorFunc(el, i) : '')
+  ).join('');
+}
 
-const hosts = {
+class Hosts {
 
-  add: function add(ip, host) {
-    if (!queue.add[ip])
+  /* --- PUBLIC API --- */
+
+  constructor(options) {
+    this.writeInProgress = false;
+    this.queue = { add: {}, remove: {}, removeHost: {} };
+
+    this.config = {
+      atomicWrites: true,
+      debounceTime: 500,
+      hostsFile: DEFAULT_HOSTS,
+      noWrites: false,
+      EOL:  DEFAULT_EOL,
+    };
+
+    if (options) {
+      for (const key in options) {
+        if (typeof this.config[key] !== 'undefined')
+          this.config[key] = options[key];
+        else
+          throw new Error("No such config option: " + key);
+      }
+    }
+
+    this.writeFile = this.config.atomicWrites
+      ? atomicWrite.writeFile.bind(atomicWrite)
+      : fs.writeFile.bind(fs);
+
+    this.queueWrite = this.noWrites
+      ? function() {}
+      : debounce(this.write, this.config.debounceTime);
+  }
+
+  add(ip, host) {
+    const queue = this.queue;
+
+    if (!this.queue.add[ip])
       queue.add[ip] = [];
 
     if (typeof host === 'object')
@@ -21,10 +58,12 @@ const hosts = {
     else
       queue.add[ip].push(host);
 
-    queueWrite();
-  },
+    this.queueWrite();
+  }
 
-  remove: function remove(ip, host) {
+  remove(ip, host) {
+    const queue = this.queue;
+
     if (!queue.remove[ip])
       queue.remove[ip] = [];
 
@@ -39,107 +78,99 @@ const hosts = {
     else
       queue.remove[ip].push(host);
 
-    queueWrite();
-  },
-
-  removeHost: function removeHost(host) {
-    queue.removeHost[host] = true;
-    queueWrite();
-  },
-
-  clearQueue: function clearQueue() {
-    queue.add = {};
-    queue.remove = {};
-    queue.removeHost = {};
+    this.queueWrite();
   }
 
-};
-
-function arrayJoinFunc(arr, separatorFunc) {
-  return arr.map(
-    (el, i) => el + (i < arr.length-1 ? separatorFunc(el, i) : '')
-  ).join('');
-}
-
-function modify(input) {
-  const arr = input.split(/\r?\n/).map(line => {
-    if (line === '' || line.startsWith('#'))
-      return line;
-
-    let hosts = line.split(/[\s]+/);
-    const whitespace = line.match(/\s+/g).slice();
-    const ip = hosts.shift();
-
-    // removeHost
-    hosts = hosts.filter(x => !queue.removeHost[x]);
-    queue.removeHost = {};
-
-    if (queue.add[ip]) {
-      hosts = hosts.concat(queue.add[ip].filter(x => !hosts.includes(x)));
-      delete queue.add[ip];
-    }
-
-    if (queue.remove[ip]) {
-      let host;
-      while ((host = queue.remove[ip].pop()))
-        hosts = hosts.filter(x => x !== host)
-    }
-
-    if (hosts.length)
-      return ip +
-        (whitespace[0] || ' ') +
-        arrayJoinFunc(hosts, (x, i) => whitespace[i+1] || ' ');
-
-    return undefined;
-  });
-
-  // Start before trailing newlines and comments
-  let startIndex;
-  if (arr.length) {
-    startIndex = arr.length - 1;
-    while (startIndex > 0 && (!arr[startIndex] || arr[startIndex].startsWith('#')))
-      startIndex--;
-  } else {
-    startIndex = 0;
+  removeHost(host) {
+    this.queue.removeHost[host] = true;
+    this.queueWrite();
   }
 
-  // TODO: try mimic preceeding whitespace pattern?
-  for (const ip in queue.add)
-    arr.splice(++startIndex, 0, ip + ' ' + queue.add[ip].join(' '));
+  clearQueue() {
+    this.queue.add = {};
+    this.queue.remove = {};
+    this.queue.removeHost = {};
+  }
 
-  hosts.clearQueue();
+  /* --- INTERNAL API --- */
 
-  return arr.join(EOL);
-}
+  modify(input) {
+    const queue = this.queue;
+    const arr = input.split(/\r?\n/).map(line => {
+      if (line === '' || line.startsWith('#'))
+        return line;
 
-let writeInProgress = false;
+      let hosts = line.split(/[\s]+/);
+      const whitespace = line.match(/\s+/g).slice();
+      const ip = hosts.shift();
 
-function write() {
-  if (writeInProgress)
-    return queueWrite();
+      // removeHost
+      hosts = hosts.filter(x => !queue.removeHost[x]);
+      queue.removeHost = {};
 
-  writeInProgress = true;
+      if (queue.add[ip]) {
+        hosts = hosts.concat(queue.add[ip].filter(x => !hosts.includes(x)));
+        delete queue.add[ip];
+      }
 
-  // TODO, cache & stat to invalidate
-  fs.readFile(HOSTS_FILE, function(err, file) {
-    if (err) {
-      console.warn(err);
-      console.warn('Creating empty hosts file');
-      file = '';
-    }
+      if (queue.remove[ip]) {
+        let host;
+        while ((host = queue.remove[ip].pop()))
+          hosts = hosts.filter(x => x !== host)
+      }
 
-    //atomicWrite.
-    fs.writeFile(HOSTS_FILE, modify(file.toString()), err => {
-      if (err)
-        throw err;
-      writeInProgress = false;
+      if (hosts.length)
+        return ip +
+          (whitespace[0] || ' ') +
+          arrayJoinFunc(hosts, (x, i) => whitespace[i+1] || ' ');
+
+      return undefined;
     });
-  });
+
+    // Start before trailing newlines and comments
+    let startIndex;
+    if (arr.length) {
+      startIndex = arr.length - 1;
+      while (startIndex > 0 && (!arr[startIndex] || arr[startIndex].startsWith('#')))
+        startIndex--;
+    } else {
+      startIndex = 0;
+    }
+
+    // TODO: try mimic preceeding whitespace pattern?
+    for (const ip in queue.add)
+      arr.splice(++startIndex, 0, ip + ' ' + queue.add[ip].join(' '));
+
+    this.clearQueue();
+
+    return arr.join(this.config.EOL);
+  }
+
+  /* --- FILE MANAGEMENT (INTERNAL) --- */
+
+  write() {
+    if (this.writeInProgress)
+      return this.queueWrite();
+
+    this.writeInProgress = true;
+
+    // TODO, cache & stat to invalidate
+    fs.readFile(this.config.hostsFile, (err, file) => {
+      if (err) {
+        console.warn(err);
+        console.warn('Creating empty hosts file');
+        file = '';
+      }
+
+      //atomicWrite.
+      this.writeFile(this.config.hostsFile, this.modify(file.toString()), err => {
+        if (err)
+          throw err;
+        this.writeInProgress = false;
+      });
+    });
+  }
+
 }
 
-const queueWrite = debounce(write, 500);
-
-// for testing
-export { queue, modify };
-
-export default hosts;
+export default Hosts;
