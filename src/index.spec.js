@@ -54,6 +54,13 @@ describe('hosts', () => {
         expect(hosts.modify(orig)).toBe(orig);
       });
 
+      it('correctly adds to a blank hosts file', () => {
+        const orig = '';
+        const desired = '127.0.0.1 localhost';
+        hosts.add('127.0.0.1', 'localhost');
+        expect(hosts.modify(orig)).toBe(desired);
+      });
+
       it('removes a single hostname from an existing IP', () => {
         const orig = '127.0.0.1 localhost localhost2';
         const desired = '127.0.0.1 localhost';
@@ -72,6 +79,13 @@ describe('hosts', () => {
         const orig = '127.0.0.1 localhost admin';
         const desired = '127.0.0.1 localhost';
         hosts.removeHost('admin');
+        expect(hosts.modify(orig)).toBe(desired);
+      });
+
+      it('can remove all hosts / an entire line', () => {
+        const orig = '127.0.0.1 localhost\n127.0.0.2 localhost2 localhost3';
+        const desired = '127.0.0.1 localhost\n';
+        hosts.remove('127.0.0.2', '*');
         expect(hosts.modify(orig)).toBe(desired);
       });
 

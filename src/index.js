@@ -79,16 +79,19 @@ class Hosts extends EventEmitter {
     if (!queue.remove[ip])
       queue.remove[ip] = [];
 
-    // skip if we already have a '*'
-    if (typeof queue.remove[ip] === 'string')
+    // Don't do anything if there is already a '*' for this host in the queue
+    if (typeof queue.remove[ip] === '*')
       return;
 
     if (host === '*')
       queue.remove[ip] = '*';
-    else if (typeof host === 'object')
+    else if (typeof host === 'string')
+      queue.remove[ip].push(host);
+    else if (isArray(host))
       queue.remove[ip] = queue.add[ip].concat(host);
     else
-      queue.remove[ip].push(host);
+      throw new Error('hosts.remove(ip, host) expects `host` to be a string or array of ' +
+        `strings, not ${typeof host}: ` + JSON.stringify(host));
 
     this._queueUpdate();
   }
@@ -137,9 +140,13 @@ class Hosts extends EventEmitter {
       }
 
       if (queue.remove[ip]) {
-        let host;
-        while ((host = queue.remove[ip].pop()))
-          hosts = hosts.filter(x => x !== host)
+        if (queue.remove[ip] === '*') {
+          hosts = [];
+        } else {
+          let host;
+          while ((host = queue.remove[ip].pop()))
+            hosts = hosts.filter(x => x !== host)
+        }
       }
 
       if (hosts.length)
@@ -152,12 +159,13 @@ class Hosts extends EventEmitter {
 
     // Start before trailing newlines and comments
     let startIndex;
-    if (arr.length) {
+    if (arr[0] === '') {
+      arr.pop();
+      startIndex = 0;
+    } else {
       startIndex = arr.length - 1;
       while (startIndex > 0 && (!arr[startIndex] || arr[startIndex].startsWith('#')))
         startIndex--;
-    } else {
-      startIndex = 0;
     }
 
     // TODO: try mimic preceeding whitespace pattern?
