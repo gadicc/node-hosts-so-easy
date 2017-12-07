@@ -80,7 +80,7 @@ class Hosts extends EventEmitter {
       queue.remove[ip] = [];
 
     // Don't do anything if there is already a '*' for this host in the queue
-    if (typeof queue.remove[ip] === '*')
+    if (queue.remove[ip] === '*')
       return;
 
     if (host === '*')
@@ -88,7 +88,7 @@ class Hosts extends EventEmitter {
     else if (typeof host === 'string')
       queue.remove[ip].push(host);
     else if (isArray(host))
-      queue.remove[ip] = queue.add[ip].concat(host);
+      queue.remove[ip] = queue.remove[ip].concat(host);
     else
       throw new Error('hosts.remove(ip, host) expects `host` to be a string or array of ' +
         `strings, not ${typeof host}: ` + JSON.stringify(host));

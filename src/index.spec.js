@@ -89,6 +89,27 @@ describe('hosts', () => {
         expect(hosts.modify(orig)).toBe(desired);
       });
 
+      it('can remove an array of hosts', () => {
+        const orig = '127.0.0.1 localhost localhost2 localhost3 localhost4';
+        const desired = '127.0.0.1 localhost localhost4';
+        hosts.remove('127.0.0.1', ['localhost2', 'localhost3']);
+        expect(hosts.modify(orig)).toBe(desired);
+      });
+
+      it('remove() throws on invalid host arg', () => {
+        expect(() => {
+          hosts.remove('127.0.0.1', {});
+        }).toThrow('expects `host`');
+      });
+
+      it('remove a host after * works as expected', () => {
+        const orig = '127.0.0.1 localhost\n127.0.0.2 localhost2 localhost3';
+        const desired = '127.0.0.1 localhost\n';
+        hosts.remove('127.0.0.2', '*');
+        hosts.remove('127.0.0.2', 'localhost3');
+        expect(hosts.modify(orig)).toBe(desired);
+      });
+
     });
 
     describe('preserves formatting', () => {
