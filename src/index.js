@@ -182,15 +182,13 @@ class Hosts extends EventEmitter {
     // Check if file has changed to avoid unnecessary reread.
     // TODO don't check if we've written since last read.
     fs.stat(this.config.hostsFile, (err, stats) => {
-      console.log('hostsFile.ctimeMs', this.hostsFile.ctimeMs);
-      console.log(stats);
-      if (stats.ctimeMs === this.hostsFile.ctimeMs) {
+      if (stats.ctime === this.hostsFile.ctime) {
 
         this._updateContents(this.modify(this.hostsFile.raw));
 
       } else {
 
-        this.hostsFile.ctimeMs = stats.ctimeMs;
+        this.hostsFile.ctime = stats.ctime;
         fs.readFile(this.config.hostsFile, (err, file) => {
           if (err)
             throw err;
