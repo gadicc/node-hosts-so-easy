@@ -12,11 +12,12 @@
   },
   "scripts": {
     "dev": "nodemon src/index.js --exec babel-node",
-    "compile": "babel src -d lib",
-    "test": "jest",
+    "build": "babel src -d lib",
+    "test": "jest src",
+    "test-dist": "jest lib",
     "lint": "eslint src",
-    "coverage": "jest --coverage",
-    "coveralls": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+    "coverage": "jest --coverage src",
+    "coveralls": "jest --coverage lib && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
