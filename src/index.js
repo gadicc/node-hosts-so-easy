@@ -47,7 +47,7 @@ class Hosts extends EventEmitter {
       }
     }
 
-    this.writeFile = config.atomicWrites
+    this._writeFile = config.atomicWrites
       ? atomicWrite.writeFile.bind(atomicWrite)
       : fs.writeFile.bind(fs);
 
@@ -180,7 +180,7 @@ class Hosts extends EventEmitter {
   /* --- FILE MANAGEMENT (INTERNAL) --- */
 
   _updateContents(contents) {
-    this.writeFile(this.config.hostsFile, contents, err => {
+    this._writeFile(this.config.hostsFile, contents, err => {
       if (err)
         throw err;
       this.writeInProgress = false;

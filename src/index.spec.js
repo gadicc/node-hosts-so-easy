@@ -199,6 +199,14 @@ describe('hosts', () => {
       expect(output).toBe('127.0.0.1 localhost localhost2'); // no FAIL
     });
 
+    it('rethrows writeFile errors', () => {
+      const hosts = new Hosts();
+      hosts._writeFile = (p, c, cb) => cb(new Error('writeFile'));
+      expect(() => {
+        hosts._updateContents('something')
+      }).toThrow('writeFile');
+    });
+
   });
 
 });
