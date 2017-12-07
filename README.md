@@ -6,6 +6,8 @@
 
 Copyright (c) 2017 by Gadi Cohen.  Released under the MIT license.
 
+Note: we support and run tests against Node.js 6.0.0 (2016-04-26).
+
 ## Features
 
   * [X] Preserves formatting (comments & whitespace choices)
@@ -60,13 +62,13 @@ const hosts = new Hosts({
 
 ## TODO
 
-  * [ ] Ability to turn off atomic writes
+  * [X] Ability to turn off atomic writes
   * [ ] Maintain a header block (put hosts in same section)
-  * [ ] EventEmitter for writes
+  * [X] EventEmitter for writes
 
 ## Wishlist (will add if requested)
 
   * [ ] Callback / promise when particular host entry added
         Can't think of any reason why the 'write' event would not be sufficient.
 
-  * [ ] Better caching for those doing A LOT of work on the file.
+  * [X] Better caching for those doing A LOT of work on the file.
