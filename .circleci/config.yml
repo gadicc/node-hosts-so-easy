@@ -35,3 +35,5 @@ jobs:
 
       # run tests!
       - run: yarn build && yarn test-dist
+
+      - run: yarn coveralls
