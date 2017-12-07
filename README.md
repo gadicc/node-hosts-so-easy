@@ -9,9 +9,9 @@ Copyright (c) 2017 by Gadi Cohen.  Released under the MIT license.
 ## Features
 
   * [X] Preserves formatting (comments & whitespace choices)
-  * [X] Built for safe and concurrent / parallel use.
-  * [X] Changes are queued, atomic write is debounced 500ms (by default).
   * [X] Add/remove funcs are "use and forget" - no callbacks required.
+  * [X] Built for safe and concurrent / parallel use.
+  * [X] Changes are batched, atomic write is debounced 500ms (by default).
 
 ## Usage
 
@@ -25,6 +25,12 @@ for (let i = 2; i < 10; i++)
 
 hosts.remove('192.168.0.2', 'host2');
 hosts.removeHost('host1');
+
+// callback/promise after all changes synced in single write
+await hosts.postWrite();
+hosts.postWrite(callback);
+hosts.on('writeSuccess', callback);
+hosts.once('writeSuccess', callback);
 ```
 
 ## Options

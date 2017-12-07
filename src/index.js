@@ -96,11 +96,15 @@ class Hosts extends EventEmitter {
     this.queue.removeHost = {};
   }
 
-  postWrite() {
-    return new Promise((resolve, reject) => {
-      // Ok for now, could handle reject with a bit more effort.
-      this.once('writeSuccess', resolve);
-    });
+  postWrite(callback) {
+    // Ok for now, could handle reject/err with a bit more effort.
+
+    if (callback)
+      this.once('writeSuccess', callback);
+    else
+      return new Promise(resolve => {
+        this.once('writeSuccess', resolve);
+      });
   }
 
   /* --- INTERNAL API --- */
