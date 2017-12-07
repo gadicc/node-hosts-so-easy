@@ -1,12 +1,21 @@
 {
   "name": "hosts-so-easy",
-  "version": "1.0.0",
+  "version": "1.0.2",
+  "description": "Safe, parallel API for manipulating /etc/hosts",
   "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gadicc/hosts-so-easy"
+  },
+  "keywords": [
+    "hosts",
+    "hostfile",
+    "hostsfile"
+  ],
+  "author": "Gadi Cohen <dragon@wastelands.net>",
   "license": "MIT",
   "dependencies": {
     "atomic-write": "^0.1.1",
-    "docker-events": "^0.0.2",
-    "dockerode": "^2.5.3",
     "eventemitter3": "^2.0.3",
     "lodash": "^4.17.4"
   },
