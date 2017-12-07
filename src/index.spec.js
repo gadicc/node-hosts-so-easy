@@ -156,7 +156,7 @@ describe('hosts', () => {
 
       // "Inject" the file, without using the real file contents (no FAIL host)
       const stats = await fs.stat(filename);
-      hosts.hostsFile.ctimeMs = stats.ctimeMs;
+      hosts.hostsFile.ctime = stats.ctime;
       hosts.hostsFile.raw = '127.0.0.1 localhost';
 
       // This operation should not re-load the file, i.e. no "FAIL" host
