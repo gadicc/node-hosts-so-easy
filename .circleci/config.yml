@@ -33,8 +33,11 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      # we want to run tests against the build for npm (on minimum node)
+      - run: yarn build
+
       # run coveralls first in case tests fail
       - run: yarn coveralls
 
       # run tests!
-      - run: yarn build && yarn test-dist
+      - run: yarn test-dist
