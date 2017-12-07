@@ -8,6 +8,9 @@ const win = process.env === 'win32';
 const DEFAULT_EOL = win ? '\r\n' : '\n';
 const DEFAULT_HOSTS = win ? 'C:/Windows/System32/drivers/etc/hosts' : '/etc/hosts';
 
+const isArray = Array.isArray ||
+  (arg => Object.prototype.toString.call(arg) === '[object Array]');
+
 function arrayJoinFunc(arr, separatorFunc) {
   return arr.map(
     (el, i) => el + (i < arr.length-1 ? separatorFunc(el, i) : '')
@@ -59,10 +62,13 @@ class Hosts extends EventEmitter {
     if (!this.queue.add[ip])
       queue.add[ip] = [];
 
-    if (typeof host === 'object')
+    if (typeof host === 'string')
+      queue.add[ip].push(host);
+    else if (isArray(host))
       queue.add[ip] = queue.add[ip].concat(host);
     else
-      queue.add[ip].push(host);
+      throw new Error('hosts.add(ip, host) expects `host` to be a string or array of ' +
+        `strings, not ${typeof host}: ` + JSON.stringify(host));
 
     this._queueUpdate();
   }

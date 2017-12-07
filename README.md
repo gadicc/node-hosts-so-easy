@@ -65,6 +65,7 @@ const hosts = new Hosts({
   * [X] Ability to turn off atomic writes
   * [ ] Maintain a header block (put hosts in same section)
   * [X] EventEmitter for writes
+  * [ ] Validate arguments, throw on invalid
 
 ## Wishlist (will add if requested)
 

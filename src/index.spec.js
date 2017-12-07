@@ -28,6 +28,19 @@ describe('hosts', () => {
         expect(hosts.modify(orig)).toBe(desired);
       });
 
+      it('add() accepts an array of hosts as a 2nd arg', () => {
+        const orig = '127.0.0.1 localhost';
+        const desired = '127.0.0.1 localhost localhost2 localhost3';
+        hosts.add('127.0.0.1', ['localhost2', 'localhost3']);
+        expect(hosts.modify(orig)).toBe(desired);
+      });
+
+      it('add() throws on invalid host arg', () => {
+        expect(() => {
+          hosts.add('127.0.0.1', {});
+        }).toThrow('expects `host`');
+      });
+
       it('adds a new hostname to existing IP', () => {
         const orig = '127.0.0.1 localhost';
         const desired = '127.0.0.1 localhost localhost2';
