@@ -4,7 +4,7 @@ import util from 'util';
 import pify from 'pify';
 import _tmp from 'tmp';
 
-import Hosts from './index';
+import Hosts, { noop } from './index';
 
 const fs = pify(_fs);
 const tmp = pify(_tmp);
@@ -97,6 +97,11 @@ describe('hosts', () => {
       expect(
         () => new Hosts({ noSuchOption: true })
       ).toThrow();
+    });
+
+    it('noWrites: true', () => {
+      const hosts = new Hosts({ noWrites: true });
+      expect(hosts._queueUpdate).toEqual(noop);
     });
 
   });

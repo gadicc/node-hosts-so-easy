@@ -14,6 +14,8 @@ function arrayJoinFunc(arr, separatorFunc) {
   ).join('');
 }
 
+function noop() {}
+
 class Hosts extends EventEmitter {
 
   /* --- PUBLIC API --- */
@@ -46,8 +48,8 @@ class Hosts extends EventEmitter {
       ? atomicWrite.writeFile.bind(atomicWrite)
       : fs.writeFile.bind(fs);
 
-    this._queueUpdate = this.noWrites
-      ? function() {}
+    this._queueUpdate = config.noWrites
+      ? noop
       : debounce(this._update, config.debounceTime);
   }
 
@@ -203,4 +205,5 @@ class Hosts extends EventEmitter {
 
 }
 
+export { noop };
 export default Hosts;
