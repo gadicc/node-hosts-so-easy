@@ -183,6 +183,21 @@ describe('hosts', () => {
       expect(output).toBe('127.0.0.1 localhost localhost2');
     });
 
+    it('postWrite(callback) callls callback after write', (done) => {
+      tmp.tmpName().then(filename => {
+        fs.writeFile(filename, '127.0.0.1 localhost').then(() => {
+          const hosts = new Hosts({ hostsFile: filename, debounceTime: 0, atomicWrites: false });
+          hosts.add('127.0.0.1', 'localhost2');
+          hosts.postWrite(() => {
+            fs.readFile(filename).then(output => {
+              expect(output.toString()).toBe('127.0.0.1 localhost localhost2');
+              done();
+            });
+          });
+        });
+      });
+    });
+
     it('file is reread if it has changed', async () => {
       const filename = await tmp.tmpName();
       await fs.writeFile(filename, '127.0.0.1 localhost');
