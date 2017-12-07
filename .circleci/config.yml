@@ -33,7 +33,8 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      # run coveralls first in case tests fail
+      - run: yarn coveralls
+
       # run tests!
       - run: yarn build && yarn test-dist
-
-      - run: yarn coveralls
