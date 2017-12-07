@@ -8,6 +8,7 @@ const win = process.env === 'win32';
 const DEFAULT_EOL = win ? '\r\n' : '\n';
 const DEFAULT_HOSTS = win ? 'C:/Windows/System32/drivers/etc/hosts' : '/etc/hosts';
 
+/* istanbul ignore next */
 const isArray = Array.isArray ||
   (arg => Object.prototype.toString.call(arg) === '[object Array]');
 
