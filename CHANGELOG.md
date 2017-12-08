@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## 1.0.3 - 2017-12-08
 
-[Unreleased]: https://github.com/gadicc/hosts-so-easy/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/gadicc/hosts-so-easy/compare/v1.1.2...HEAD
+[v1.1.2]: https://github.com/gadicc/hosts-so-easy/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/gadicc/hosts-so-easy/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/gadicc/hosts-so-easy/compare/v1.0.3...v1.1.0
