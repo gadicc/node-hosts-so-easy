@@ -19,6 +19,10 @@ function arrayJoinFunc(arr, separatorFunc) {
 }
 
 function noop() {}
+function ifErrThrow(err) {
+  if (err)
+    throw err;
+}
 
 class Hosts extends EventEmitter {
 
@@ -54,7 +58,7 @@ class Hosts extends EventEmitter {
 
     this._queueUpdate = config.noWrites
       ? noop
-      : debounce(this._update, config.debounceTime);
+      : debounce(this._update.bind(this, ifErrThrow), config.debounceTime);
   }
 
   add(ip, host) {
@@ -189,7 +193,8 @@ class Hosts extends EventEmitter {
     });
   }
 
-  _update() {
+  // note: callback is only currently used for testing
+  _update(callback) {
     if (this.writeInProgress)
       return this._queueUpdate();
 
@@ -199,19 +204,24 @@ class Hosts extends EventEmitter {
     // Check if file has changed to avoid unnecessary reread.
     // TODO don't check if we've written since last read.
     fs.stat(this.config.hostsFile, (err, stats) => {
+      if (err)
+        return callback(err);
+
       if (this.hostsFile.ctime && this.hostsFile.ctime.getTime() === stats.ctime.getTime()) {
 
         this._updateContents(this.modify(this.hostsFile.raw));
+        callback();
 
       } else {
 
         this.hostsFile.ctime = stats.ctime;
         fs.readFile(this.config.hostsFile, (err, file) => {
           if (err)
-            throw err;
+            return callback(err);
 
           this.hostsFile.raw = file.toString();
           this._updateContents(this.modify(this.hostsFile.raw));
+          callback();
         });
 
       }

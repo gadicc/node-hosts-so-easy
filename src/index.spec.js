@@ -243,6 +243,43 @@ describe('hosts', () => {
       }).toThrow('writeFile');
     });
 
+    it('rethrows stat errors', async (done) => {
+      const filename = await tmp.tmpName();  // don't create
+      const hosts = new Hosts({ hostsFile: filename });
+      hosts._update(err => {
+        /* {
+          Error: ENOENT: no such file or directory, stat '/tmp/tmp-25582khYlFVTYEQob'
+          errno: -2,
+          code: 'ENOENT',
+          syscall: 'stat',
+          path: '/tmp/tmp-25582khYlFVTYEQob'
+        } */
+        expect(err).toBeDefined();
+        expect(err.code).toBe('ENOENT');
+        done();
+      });
+
+    });
+
+    it('rethrows readFile errors', async (done) => {
+      const filename = await tmp.tmpName();
+      await fs.writeFile(filename, '127.0.0.1 localhost FAIL');
+      await fs.chmod(filename, 0);
+      const hosts = new Hosts({ hostsFile: filename });
+      hosts._update(err => {
+        /* {
+          Error: EACCES: permission denied, open '/tmp/tmp-25275e8XtKkaY2Yo0'
+          errno: -13,
+          code: 'EACCES',
+          syscall: 'open',
+          path: '/tmp/tmp-25275e8XtKkaY2Yo0'
+        } */
+        expect(err).toBeDefined();
+        expect(err.code).toBe('EACCES');
+        done();
+      });
+    });
+
   });
 
 });
