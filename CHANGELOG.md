@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v1.1.2] - 2017-12-08
+### Changed
+- Updated mention of old event names in README.
+
 ## [v1.1.1] - 2017-12-08
 ### Fixed
 - Force `yarn build` before publish (to publish babel transpiled files).

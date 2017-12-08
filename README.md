@@ -32,15 +32,15 @@ for (let i = 2; i < 10; i++)
 
 // can remove individual hosts, all hosts for an IP, or a host from any IP
 hosts.remove('192.168.2.1', '*');
-hosts.remove('192.168.3.1', 'host2');
-hosts.remove('192.168.4.1', [ 'sub3a', 'sub3b' ]);
+hosts.remove('192.168.3.1', 'vhost20');
+hosts.remove('192.168.4.1', [ 'mongo', 'db' ]);
 hosts.removeHost('unwantedHost');
 
-// callback/promise after all changes synced in single write
-await hosts.postWrite();
-hosts.postWrite(callback);
-hosts.on('writeSuccess', callback);
-hosts.once('writeSuccess', callback);
+// callback/promise after all changes synced in a single write
+await hosts.updateFinish();
+hosts.updateFinish(callback);
+hosts.on('updateFinish', callback);
+hosts.once('updateFinish', callback);
 ```
 
 ## Options
