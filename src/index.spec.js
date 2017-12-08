@@ -287,33 +287,6 @@ describe('hosts', () => {
       fs.unlink(filename);
     });
 
-    it('rethrows writeFile errors', (done) => {
-      const hosts = new Hosts();
-      hosts._writeFile = (p, c, cb) => cb(new Error('writeFile'));
-      hosts._updateContents('something', (err) => {
-        expect(err).toBeInstanceOf(Error);
-        done();
-      });
-    });
-
-    it('rethrows stat errors', async (done) => {
-      const filename = await tmp.tmpName();  // don't create
-      const hosts = new Hosts({ hostsFile: filename });
-      hosts._update(err => {
-        /* {
-          Error: ENOENT: no such file or directory, stat '/tmp/tmp-25582khYlFVTYEQob'
-          errno: -2,
-          code: 'ENOENT',
-          syscall: 'stat',
-          path: '/tmp/tmp-25582khYlFVTYEQob'
-        } */
-        expect(err).toBeDefined();
-        expect(err.code).toBe('ENOENT');
-        done();
-      });
-
-    });
-
     it('rethrows readFile errors', async (done) => {
       const filename = await tmp.tmpName();
       await fs.writeFile(filename, '127.0.0.1 localhost FAIL');
