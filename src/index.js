@@ -20,6 +20,7 @@ function arrayJoinFunc(arr, separatorFunc) {
 
 function noop() {}
 function ifErrThrow(err) {
+  /* istanbul ignore next */
   if (err)
     throw err;
 }

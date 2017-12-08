@@ -286,6 +286,27 @@ describe('hosts', () => {
       });
     });
 
+    it('update() will never run concurrently', async (done) => {
+      const filename = await tmp.tmpName();
+      await fs.writeFile(filename, '127.0.0.1 localhost');
+
+      const hosts = new Hosts({ hostsFile: filename, debounceTime: 0, atomicWrites: false });
+      hosts.add('127.0.0.1', 'localhost2');
+
+      hosts._queueUpdate = jest.fn();
+      hosts.on('writeStart', async () => {
+        expect(hosts._queueUpdate).not.toHaveBeenCalled();
+        hosts._update(err => { if (err) done(err) });
+        expect(hosts._queueUpdate).toHaveBeenCalled();
+
+        await hosts.postWrite();
+        const output = (await fs.readFile(filename)).toString();
+        expect(output).toBe('127.0.0.1 localhost localhost2');
+        fs.unlink(filename);
+        done();
+      });
+    });
+
   });
 
 });
