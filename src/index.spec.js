@@ -152,6 +152,35 @@ describe('hosts', () => {
 
     });
 
+    describe('header section', () => {
+
+      it('place new entries below a header section (with no entries)', () => {
+        const   hosts = new Hosts({ noWrites: true, header: 'test' });
+        const    orig = '127.0.0.1 localhost\n\n# test\n\n192.168.0.1 other';
+        const desired = '127.0.0.1 localhost\n\n# test\n127.0.0.2 localhost2\n\n192.168.0.1 other';
+        hosts.add('127.0.0.2', 'localhost2');
+        expect(hosts.modify(orig)).toBe(desired);
+      });
+
+      it('place new entries at the bottom of a header section', () => {
+        const   hosts = new Hosts({ noWrites: true, header: 'test' });
+        const    orig = '127.0.0.1 localhost\n\n# test\n127.0.0.2 localhost2\n\n192.168.0.1 other';
+        const desired = '127.0.0.1 localhost\n\n# test\n127.0.0.2 localhost2\n127.0.0.3 localhost3\n\n192.168.0.1 other';
+        hosts.add('127.0.0.3', 'localhost3');
+        expect(hosts.modify(orig)).toBe(desired);
+      });
+
+      it('create a new header section if it does not exist', () => {
+        const   hosts = new Hosts({ noWrites: true, header: 'test' });
+        const    orig = '127.0.0.1 localhost\n\n192.168.0.1 other';
+        const desired = '127.0.0.1 localhost\n\n# test\n127.0.0.2 localhost2\n\n192.168.0.1 other';
+        hosts.add('127.0.0.2', 'localhost2');
+        expect(hosts.modify(orig)).toBe(desired);
+      });
+
+
+    });
+
   });
 
   describe('config options', () => {

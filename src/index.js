@@ -21,11 +21,14 @@ function arrayJoinFunc(arr, separatorFunc) {
 }
 
 function noop() {}
+
 function ifErrThrow(err) {
   /* istanbul ignore next */
   if (err)
     throw err;
 }
+
+const isSkipLine = line => !line || line.match(/^\#|^\s*$/);
 
 class Hosts extends EventEmitter {
 
@@ -41,6 +44,7 @@ class Hosts extends EventEmitter {
     const config = this.config = {
       atomicWrites: true,
       debounceTime: 500,
+      header: false,
       hostsFile: DEFAULT_HOSTS,
       noWrites: false,
       EOL:  DEFAULT_EOL,
@@ -129,10 +133,16 @@ class Hosts extends EventEmitter {
   /* --- INTERNAL API --- */
 
   modify(input) {
+    let headerLine;
     const queue = this.queue;
-    const arr = input.split(/\r?\n/).map(line => {
-      if (line === '' || line.startsWith('#'))
+    const header = this.config.header ? '# ' + this.config.header : false;
+
+    const arr = input.split(/\r?\n/).map((line, lineNumber) => {
+      if (header && line === header) {
+        headerLine = lineNumber;
+      } else if (isSkipLine(line)) {
         return line;
+      }
 
       let hosts = line.split(/[\s]+/);
       const ip = hosts.shift();
@@ -168,15 +178,25 @@ class Hosts extends EventEmitter {
       return undefined;
     });
 
-    // Start before trailing newlines and comments
     let startIndex;
     if (arr[0] === '') {
       arr.pop();
       startIndex = 0;
+    } else if (header && headerLine) {
+      // Start below headerLine, then below valid entries,
+      // but above any whitespace and comments.
+      startIndex = headerLine;
+      while (startIndex < arr.length && !isSkipLine(arr[startIndex+1]))
+        startIndex++;
     } else {
+      // Start before trailing newlines and comments
       startIndex = arr.length - 1;
-      while (startIndex > 0 && (!arr[startIndex] || arr[startIndex].startsWith('#')))
+      while (startIndex > 0 && isSkipLine(arr[startIndex]))
         startIndex--;
+
+      // i.e. if header && !headerLine, insert the header over here
+      if (header)
+        arr.splice(startIndex, 0, header, '');
     }
 
     // TODO: try mimic preceeding whitespace pattern?
