@@ -338,7 +338,7 @@ describe('hosts', () => {
       hosts.add('127.0.0.1', 'localhost2');
 
       hosts._queueUpdate = jest.fn();
-      hosts.on('writeStart', async () => {
+      hosts.on('updateStart', async () => {
         expect(hosts._queueUpdate).not.toHaveBeenCalled();
         hosts._update(err => { if (err) done(err) });
         expect(hosts._queueUpdate).toHaveBeenCalled();

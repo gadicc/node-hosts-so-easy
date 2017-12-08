@@ -10,7 +10,7 @@ Note: we support and run tests against Node.js 6.0.0 (2016-04-26).
 
 ## Features
 
-  * [X] Preserves formatting (comments & whitespace choices)
+  * [X] Preserves formatting (comments & whitespace choices) - see sample below.
   * [X] Add/remove funcs are "use and forget" - no callbacks required.
   * [X] Built for safe and concurrent / parallel use.
   * [X] Changes are batched, atomic write is debounced 500ms (by default).
@@ -23,11 +23,18 @@ import Hosts from 'hosts-so-easy';
 const hosts = new Hosts();
 
 // hosts file is written once at the end
+hosts.add('192.168.0.1', 'www');
+hosts.add('192.168.1.1', [ 'mongo', 'db' ]);
+
+// this is completely safe, only one write occurs at the end.
 for (let i = 2; i < 10; i++)
   hosts.add('192.168.0.'+i, 'host'+i);
 
-hosts.remove('192.168.0.2', 'host2');
-hosts.removeHost('host1');
+// can remove individual hosts, all hosts for an IP, or a host from any IP
+hosts.remove('192.168.2.1', '*');
+hosts.remove('192.168.3.1', 'host2');
+hosts.remove('192.168.4.1', [ 'sub3a', 'sub3b' ]);
+hosts.removeHost('unwantedHost');
 
 // callback/promise after all changes synced in single write
 await hosts.postWrite();
@@ -64,6 +71,42 @@ const hosts = new Hosts({
 ```
 
 ## API
+
+* `hosts.add(ip, host || [host1,host2])`
+
+  For the given IP, add a single host or an array of hosts.
+
+* `hosts.clearQueue()`
+
+  If you had a change of heart, and call this in time, nothing will happen :)
+
+* `hosts.on(event, callback)`
+
+  `hosts.once(event, callback)`
+
+  Run the given callback on every event occurrence, or just once when the event
+  next occurs.  See EVENTS, below.
+
+* `hosts.remove(ip, host || [host1,host2] || '*')`
+
+  For the given IP, remove the given host or all the hosts in the array.
+  Alternatively, give a "host" of `*` to remove the entire line.
+
+* `hosts.removeHost(host)`
+
+  Remove all references of `host`, regardless of which IP it resolves to.
+
+* `hosts.postWrite([callback])`
+
+  ּFires the callback after a successful write.  If no callback given, returns
+  a `Promise`.
+
+### Events
+
+* `updateStart` - fires at the beginning of update.  Hosts file will be stat'd,
+  read and rewritten.
+
+* `writeSuccess` - fires after a successful write.
 
 ## Sample output (formatting preserved)
 

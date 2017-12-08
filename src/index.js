@@ -225,7 +225,7 @@ class Hosts extends EventEmitter {
       return this._queueUpdate();
 
     this.writeInProgress = true;
-    this.emit('writeStart');
+    this.emit('updateStart');
 
     // Check if file has changed to avoid unnecessary reread.
     // TODO don't check if we've written since last read.
