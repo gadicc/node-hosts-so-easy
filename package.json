@@ -20,13 +20,14 @@
     "lodash": "^4.17.4"
   },
   "scripts": {
-    "dev": "nodemon src/index.js --exec babel-node",
     "build": "babel src -d lib",
-    "test": "jest src",
-    "test-dist": "jest lib",
-    "lint": "eslint src",
     "coverage": "jest --coverage src",
-    "coveralls": "jest --coverage src ; cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+    "coveralls": "jest --coverage src ; cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "dev": "nodemon src/index.js --exec babel-node",
+    "lint": "eslint src",
+    "prepare": "yarn build",
+    "test": "jest src",
+    "test-dist": "jest lib"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
