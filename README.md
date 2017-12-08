@@ -72,6 +72,8 @@ const hosts = new Hosts({
 
 ## API
 
+### Methods
+
 * `hosts.add(ip, host || [host1,host2])`
 
   For the given IP, add a single host or an array of hosts.
@@ -96,17 +98,22 @@ const hosts = new Hosts({
 
   Remove all references of `host`, regardless of which IP it resolves to.
 
-* `hosts.postWrite([callback])`
+* `hosts.updateFinish([callback])`
 
-  ּFires the callback after a successful write.  If no callback given, returns
-  a `Promise`.
+  If a callback is given, it's called at the end of the update sequence (see
+  events, below).  If an error occurred, it's provided as the first argument.
+
+  If no callback is given, a `Promise` is returned.  It resolves after a
+  successful write, or rejects on failure.
 
 ### Events
 
-* `updateStart` - fires at the beginning of update.  Hosts file will be stat'd,
-  read and rewritten.
+* `updateStart` - fires at the beginning of update sequence.  Hosts file will
+  be stat'd, read and rewritten.
 
-* `writeSuccess` - fires after a successful write.
+* `updateFinish` - fires at the end of the above sequence.  On failure, the
+  error will be provided as the first argument (file not found, permission
+  denied, etc).
 
 ## Sample output (formatting preserved)
 

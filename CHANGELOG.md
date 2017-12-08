@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - Ability to maintain a header block and add keep entries there.
+- API docs.
 
 ### Changed
 - Improved skip line handling, including lines of all whitespace.

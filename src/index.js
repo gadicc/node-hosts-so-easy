@@ -40,6 +40,7 @@ class Hosts extends EventEmitter {
     this.writeInProgress = false;
     this.queue = { add: {}, remove: {}, removeHost: {} };
     this.hostsFile = {};
+    this.updateFinishCallbacks = [];
 
     const config = this.config = {
       atomicWrites: true,
@@ -66,6 +67,8 @@ class Hosts extends EventEmitter {
     this._queueUpdate = config.noWrites
       ? noop
       : debounce(this._update.bind(this, ifErrThrow), config.debounceTime);
+
+    this.on('updateFinish', this._runUpdateFinishCallbacks.bind(this));
   }
 
   add(ip, host) {
@@ -119,14 +122,16 @@ class Hosts extends EventEmitter {
     this.queue.removeHost = {};
   }
 
-  postWrite(callback) {
-    // Ok for now, could handle reject/err with a bit more effort.
-
+  updateFinish(callback) {
     if (callback)
-      this.once('writeSuccess', callback);
+      this.updateFinishCallbacks.push(callback);
     else
-      return new Promise(resolve => {
-        this.once('writeSuccess', resolve);
+      return new Promise((resolve, reject) => {
+        this.updateFinishCallbacks.push(function(err) {
+          if (err)
+            reject(err);
+          resolve();
+        });
       });
   }
 
@@ -208,14 +213,25 @@ class Hosts extends EventEmitter {
     return arr.join(this.config.EOL);
   }
 
+  _runUpdateFinishCallbacks(err) {
+    for (let i = 0; i < this.updateFinishCallbacks.length; i++)
+      this.updateFinishCallbacks[i](err);
+    this.updateFinishCallbacks = [];
+  }
+
   /* --- FILE MANAGEMENT (INTERNAL) --- */
 
-  _updateContents(contents) {
+  _updateContents(contents, callback) {
     this._writeFile(this.config.hostsFile, contents, err => {
-      if (err)
-        throw err;
+      if (err) {
+        callback(err);
+        this.emit('updateFinish', err);
+        return;
+      }
+
       this.writeInProgress = false;
-      this.emit('writeSuccess');
+      callback();
+      this.emit('updateFinish'); // success
     });
   }
 
@@ -230,24 +246,28 @@ class Hosts extends EventEmitter {
     // Check if file has changed to avoid unnecessary reread.
     // TODO don't check if we've written since last read.
     fs.stat(this.config.hostsFile, (err, stats) => {
-      if (err)
-        return callback(err);
+      if (err) {
+        callback(err);
+        this.emit('updateFinish', err);
+        return;
+      }
 
       if (this.hostsFile.ctime && this.hostsFile.ctime.getTime() === stats.ctime.getTime()) {
 
-        this._updateContents(this.modify(this.hostsFile.raw));
-        callback();
+        this._updateContents(this.modify(this.hostsFile.raw), callback);
 
       } else {
 
         this.hostsFile.ctime = stats.ctime;
         fs.readFile(this.config.hostsFile, (err, file) => {
-          if (err)
-            return callback(err);
+          if (err) {
+            callback(err);
+            this.emit('updateFinish', err);
+            return;
+          }
 
           this.hostsFile.raw = file.toString();
-          this._updateContents(this.modify(this.hostsFile.raw));
-          callback();
+          this._updateContents(this.modify(this.hostsFile.raw), callback);
         });
 
       }

@@ -200,12 +200,12 @@ describe('hosts', () => {
 
   describe('file operations', () => {
 
-    it('write occurs and fires writeSuccess event', done => {
+    it('write occurs and fires updateFinish event', done => {
       tmp.tmpName().then(filename => {
         fs.writeFile(filename, '127.0.0.1 localhost').then(() => {
           const hosts = new Hosts({ hostsFile: filename, debounceTime: 0, atomicWrites: false });
           hosts.add('127.0.0.1', 'localhost2');
-          hosts.on('writeSuccess', () => {
+          hosts.on('updateFinish', () => {
             fs.readFile(filename).then(output => {
               expect(output.toString()).toBe('127.0.0.1 localhost localhost2');
               fs.unlink(filename);
@@ -216,25 +216,28 @@ describe('hosts', () => {
       });
     });
 
-    it('postWrite() returns a promise that resolves after write', async () => {
-      const filename = await tmp.tmpName();
-      await fs.writeFile(filename, '127.0.0.1 localhost');
-
-      const hosts = new Hosts({ hostsFile: filename, debounceTime: 0, atomicWrites: false });
-      hosts.add('127.0.0.1', 'localhost2');
-
-      await hosts.postWrite();
-      const output = (await fs.readFile(filename)).toString();
-      expect(output).toBe('127.0.0.1 localhost localhost2');
-      fs.unlink(filename);
+    it('updateFinish() returns a promise that resolves after write', (done) => {
+      const hosts = new Hosts();
+      const promise = hosts.updateFinish();
+      expect(promise).toBeInstanceOf(Promise);
+      promise.then(done).catch(err => done(err));
+      hosts._runUpdateFinishCallbacks();
     });
 
-    it('postWrite(callback) callls callback after write', (done) => {
+    it('updateFinish() returns a promise that rejects after write failure', (done) => {
+      const hosts = new Hosts();
+      const promise = hosts.updateFinish();
+      expect(promise).toBeInstanceOf(Promise);
+      promise.then(() => done(new Error('Should not resolve!'))).catch(() => done());
+      hosts._runUpdateFinishCallbacks(new Error());
+    });
+
+    it('updateFinish(callback) callls callback after write', (done) => {
       tmp.tmpName().then(filename => {
         fs.writeFile(filename, '127.0.0.1 localhost').then(() => {
           const hosts = new Hosts({ hostsFile: filename, debounceTime: 0, atomicWrites: false });
           hosts.add('127.0.0.1', 'localhost2');
-          hosts.postWrite(() => {
+          hosts.updateFinish(() => {
             fs.readFile(filename).then(output => {
               expect(output.toString()).toBe('127.0.0.1 localhost localhost2');
               fs.unlink(filename);
@@ -251,13 +254,13 @@ describe('hosts', () => {
 
       const hosts = new Hosts({ hostsFile: filename, debounceTime: 0, atomicWrites: false });
       hosts.add('127.0.0.1', 'localhost2');
-      await hosts.postWrite();
+      await hosts.updateFinish();
 
       // change the file "externally" (i.e. another process)
       await fs.writeFile(filename, '127.0.0.1 localhost');
 
       hosts.add('127.0.0.1', 'localhost3');
-      await hosts.postWrite();
+      await hosts.updateFinish();
 
       const output = (await fs.readFile(filename)).toString();
       expect(output).toBe('127.0.0.1 localhost localhost3');
@@ -277,19 +280,20 @@ describe('hosts', () => {
 
       // This operation should not re-load the file, i.e. no "FAIL" host
       hosts.add('127.0.0.1', 'localhost2');
-      await hosts.postWrite();
+      await hosts.updateFinish();
 
       const output = (await fs.readFile(filename)).toString();
       expect(output).toBe('127.0.0.1 localhost localhost2'); // no FAIL
       fs.unlink(filename);
     });
 
-    it('rethrows writeFile errors', () => {
+    it('rethrows writeFile errors', (done) => {
       const hosts = new Hosts();
       hosts._writeFile = (p, c, cb) => cb(new Error('writeFile'));
-      expect(() => {
-        hosts._updateContents('something')
-      }).toThrow('writeFile');
+      hosts._updateContents('something', (err) => {
+        expect(err).toBeInstanceOf(Error);
+        done();
+      });
     });
 
     it('rethrows stat errors', async (done) => {
@@ -343,7 +347,7 @@ describe('hosts', () => {
         hosts._update(err => { if (err) done(err) });
         expect(hosts._queueUpdate).toHaveBeenCalled();
 
-        await hosts.postWrite();
+        await hosts.updateFinish();
         const output = (await fs.readFile(filename)).toString();
         expect(output).toBe('127.0.0.1 localhost localhost2');
         fs.unlink(filename);
