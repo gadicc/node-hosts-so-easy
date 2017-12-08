@@ -5,7 +5,9 @@ import debounce from 'lodash/debounce';
 import EventEmitter from 'eventemitter3';
 
 const win = process.env === 'win32';
+/* istanbul ignore next */
 const DEFAULT_EOL = win ? '\r\n' : '\n';
+/* istanbul ignore next */
 const DEFAULT_HOSTS = win ? 'C:/Windows/System32/drivers/etc/hosts' : '/etc/hosts';
 
 /* istanbul ignore next */
@@ -65,7 +67,7 @@ class Hosts extends EventEmitter {
   add(ip, host) {
     const queue = this.queue;
 
-    if (!this.queue.add[ip])
+    if (!queue.add[ip])
       queue.add[ip] = [];
 
     if (typeof host === 'string')
@@ -133,8 +135,11 @@ class Hosts extends EventEmitter {
         return line;
 
       let hosts = line.split(/[\s]+/);
-      const whitespace = line.match(/\s+/g).slice();
       const ip = hosts.shift();
+
+      // Null only on invalid /etc/hosts (e.g. IP with no hostname), but let's still run.
+      let whitespace = line.match(/\s+/g);
+      whitespace = whitespace ? whitespace.slice() : [];
 
       // removeHost
       hosts = hosts.filter(x => !queue.removeHost[x]);

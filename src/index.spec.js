@@ -28,6 +28,14 @@ describe('hosts', () => {
         expect(hosts.modify(orig)).toBe(desired);
       });
 
+      it('add() can be run twice (branch check)', () => {
+        const orig = '127.0.0.1 localhost';
+        const desired = '127.0.0.1 localhost localhost2 localhost3';
+        hosts.add('127.0.0.1', 'localhost2');
+        hosts.add('127.0.0.1', 'localhost3');
+        expect(hosts.modify(orig)).toBe(desired);
+      });
+
       it('add() accepts an array of hosts as a 2nd arg', () => {
         const orig = '127.0.0.1 localhost';
         const desired = '127.0.0.1 localhost localhost2 localhost3';
@@ -107,6 +115,13 @@ describe('hosts', () => {
         const desired = '127.0.0.1 localhost\n';
         hosts.remove('127.0.0.2', '*');
         hosts.remove('127.0.0.2', 'localhost3');
+        expect(hosts.modify(orig)).toBe(desired);
+      });
+
+      it('does not break on broken hosts file', () => {
+        const orig = '127.0.0.1';
+        const desired = '127.0.0.1 localhost';
+        hosts.add('127.0.0.1', 'localhost');
         expect(hosts.modify(orig)).toBe(desired);
       });
 
