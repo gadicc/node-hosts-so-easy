@@ -164,6 +164,7 @@ describe('hosts', () => {
           hosts.on('writeSuccess', () => {
             fs.readFile(filename).then(output => {
               expect(output.toString()).toBe('127.0.0.1 localhost localhost2');
+              fs.unlink(filename);
               done();
             });
           });
@@ -181,6 +182,7 @@ describe('hosts', () => {
       await hosts.postWrite();
       const output = (await fs.readFile(filename)).toString();
       expect(output).toBe('127.0.0.1 localhost localhost2');
+      fs.unlink(filename);
     });
 
     it('postWrite(callback) callls callback after write', (done) => {
@@ -191,6 +193,7 @@ describe('hosts', () => {
           hosts.postWrite(() => {
             fs.readFile(filename).then(output => {
               expect(output.toString()).toBe('127.0.0.1 localhost localhost2');
+              fs.unlink(filename);
               done();
             });
           });
@@ -214,6 +217,7 @@ describe('hosts', () => {
 
       const output = (await fs.readFile(filename)).toString();
       expect(output).toBe('127.0.0.1 localhost localhost3');
+      fs.unlink(filename);
     });
 
     it('file is not reread if it has not changed', async () => {
@@ -233,6 +237,7 @@ describe('hosts', () => {
 
       const output = (await fs.readFile(filename)).toString();
       expect(output).toBe('127.0.0.1 localhost localhost2'); // no FAIL
+      fs.unlink(filename);
     });
 
     it('rethrows writeFile errors', () => {
@@ -276,6 +281,7 @@ describe('hosts', () => {
         } */
         expect(err).toBeDefined();
         expect(err.code).toBe('EACCES');
+        fs.unlink(filename);
         done();
       });
     });
