@@ -2,7 +2,12 @@
 
 *Safe, parallel API for manipulating /etc/hosts*
 
-[![npm](https://img.shields.io/npm/v/hosts-so-easy.svg?maxAge=2592000)](https://www.npmjs.com/package/hosts-so-easy) [![Circle CI](https://circleci.com/gh/gadicc/hosts-so-easy.svg?style=shield)](https://circleci.com/gh/gadicc/hosts-so-easy) [![Coverage Status](https://coveralls.io/repos/github/gadicc/hosts-so-easy/badge.svg?branch=master)](https://coveralls.io/github/gadicc/hosts-so-easy?branch=master) ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
+[![npm](https://img.shields.io/npm/v/hosts-so-easy.svg?maxAge=2592000)](https://www.npmjs.com/package/hosts-so-easy)
+[![Circle CI](https://circleci.com/gh/gadicc/hosts-so-easy.svg?style=shield)](https://circleci.com/gh/gadicc/hosts-so-easy)
+[![Coverage Status](https://coveralls.io/repos/github/gadicc/hosts-so-easy/badge.svg?branch=master)](https://coveralls.io/github/gadicc/hosts-so-easy?branch=master)
+![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
+[![Greenkeeper badge](https://badges.greenkeeper.io/gadicc/hosts-so-easy.svg)](https://greenkeeper.io/)
+[![dependencies](https://david-dm.org/gadicc/hosts-so-easy.svg)](https://david-dm.org/gadicc/hosts-so-easy)
 
 Copyright (c) 2017 by Gadi Cohen.  Released under the MIT license.
 
