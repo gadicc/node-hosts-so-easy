@@ -6,7 +6,7 @@
 [![Circle CI](https://circleci.com/gh/gadicc/node-hosts-so-easy.svg?style=shield)](https://circleci.com/gh/gadicc/node-hosts-so-easy)
 [![Coverage Status](https://coveralls.io/repos/github/gadicc/node-hosts-so-easy/badge.svg?branch=master)](https://coveralls.io/github/gadicc/node-hosts-so-easy?branch=master)
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
-[![NSP Status](https://nodesecurity.io/orgs/dwyl/projects/1047e39b-0d4a-45ff-af65-c04afc41fc20/badge)](https://nodesecurity.io/orgs/dwyl/projects/1047e39b-0d4a-45ff-af65-c04afc41fc20)
+[![NSP Status](https://nodesecurity.io/orgs/gadi-personal/projects/f0ac8a50-c9e0-488c-8265-231695ad306d/badge)](https://nodesecurity.io/orgs/gadi-personal/projects/f0ac8a50-c9e0-488c-8265-231695ad306d)
 [![dependencies](https://david-dm.org/gadicc/node-hosts-so-easy.svg)](https://david-dm.org/gadicc/node-hosts-so-easy)
 [![Greenkeeper badge](https://badges.greenkeeper.io/gadicc/node-hosts-so-easy.svg)](https://greenkeeper.io/)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
