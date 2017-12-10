@@ -8,6 +8,7 @@
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 [![dependencies](https://david-dm.org/gadicc/hosts-so-easy.svg)](https://david-dm.org/gadicc/hosts-so-easy)
 [![Greenkeeper badge](https://badges.greenkeeper.io/gadicc/hosts-so-easy.svg)](https://greenkeeper.io/)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 Copyright (c) 2017 by Gadi Cohen.  Released under the MIT license.
 
