@@ -6,6 +6,7 @@
 [![Circle CI](https://circleci.com/gh/gadicc/hosts-so-easy.svg?style=shield)](https://circleci.com/gh/gadicc/hosts-so-easy)
 [![Coverage Status](https://coveralls.io/repos/github/gadicc/hosts-so-easy/badge.svg?branch=master)](https://coveralls.io/github/gadicc/hosts-so-easy?branch=master)
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
+[![NSP Status](https://nodesecurity.io/orgs/dwyl/projects/1047e39b-0d4a-45ff-af65-c04afc41fc20/badge)](https://nodesecurity.io/orgs/dwyl/projects/1047e39b-0d4a-45ff-af65-c04afc41fc20)
 [![dependencies](https://david-dm.org/gadicc/hosts-so-easy.svg)](https://david-dm.org/gadicc/hosts-so-easy)
 [![Greenkeeper badge](https://badges.greenkeeper.io/gadicc/hosts-so-easy.svg)](https://greenkeeper.io/)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
