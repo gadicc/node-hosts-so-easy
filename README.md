@@ -2,7 +2,7 @@
 
 *Safe, parallel API for manipulating /etc/hosts*
 
-[![npm](https://img.shields.io/npm/v/node-hosts-so-easy.svg?maxAge=2592000)](https://www.npmjs.com/package/node-hosts-so-easy)
+[![npm](https://img.shields.io/npm/v/hosts-so-easy.svg?maxAge=2592000)](https://www.npmjs.com/package/hosts-so-easy)
 [![Circle CI](https://circleci.com/gh/gadicc/node-hosts-so-easy.svg?style=shield)](https://circleci.com/gh/gadicc/node-hosts-so-easy)
 [![Coverage Status](https://coveralls.io/repos/github/gadicc/node-hosts-so-easy/badge.svg?branch=master)](https://coveralls.io/github/gadicc/node-hosts-so-easy?branch=master)
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
