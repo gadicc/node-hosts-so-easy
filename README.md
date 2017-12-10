@@ -9,6 +9,7 @@
 [![dependencies](https://david-dm.org/gadicc/hosts-so-easy.svg)](https://david-dm.org/gadicc/hosts-so-easy)
 [![Greenkeeper badge](https://badges.greenkeeper.io/gadicc/hosts-so-easy.svg)](https://greenkeeper.io/)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=plastic)](https://github.com/semantic-release/semantic-release)
 
 Copyright (c) 2017 by Gadi Cohen.  Released under the MIT license.
 
