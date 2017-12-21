@@ -44,7 +44,7 @@
     "jest": "^21.2.1",
     "nodemon": "^1.12.1",
     "pify": "^3.0.0",
-    "semantic-release": "^8.2.0",
+    "semantic-release": "^11.0.2",
     "tmp": "^0.0.33"
   },
   "config": {
