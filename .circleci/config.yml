@@ -48,7 +48,7 @@ jobs:
       - run: yarn build && yarn test-dist
 
       # if test passed, try release, but end true for no release needed
-      # - run: npm run semantic-release || true
+      - run: npm run semantic-release || true
 
 workflows:
   version: 2
