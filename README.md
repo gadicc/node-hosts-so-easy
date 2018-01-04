@@ -18,9 +18,9 @@ Note: we support and run tests against Node.js 6.0.0 (2016-04-26).
 
 ## Features
 
-  * [X] Preserves formatting (comments & whitespace choices) - see sample below.
-  * [X] Add/remove funcs are "use and forget" - no callbacks required.
   * [X] Built for safe and concurrent / parallel use.
+  * [X] Add/remove funcs are (optionally) "use and forget" - no callbacks required.
+  * [X] Preserves formatting (comments & whitespace choices) - see sample below.
   * [X] Changes are batched, atomic write is debounced 500ms (by default).
   * [X] Optionally keeps new entries in a separate "header" block.
 
