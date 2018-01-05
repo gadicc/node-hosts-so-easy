@@ -47,6 +47,17 @@ jobs:
       # run tests against our npm build (on this node version too)
       - run: yarn build && yarn test-dist
 
+      # Decrypt the git_deploy_key.enc key into /tmp/git_deploy_key
+      - run: openssl aes-256-cbc -d -in gadicc_github_circleci_scripts.enc -out /tmp/git_deploy_key -k "$REPO_ENC_KEY"
+      # Make sure only the current user can read the private key
+      - run: chmod 600 /tmp/git_deploy_key
+      # Create a script to return the passphrase environment variable to ssh-add
+      - run: echo 'echo ${SSH_PASSPHRASE}' > /tmp/askpass && chmod +x /tmp/askpass
+      # Start the authentication agent
+      - run: eval "$(ssh-agent -s)"
+      # Add the key to the authentication agent
+      - run: DISPLAY=":0.0" SSH_ASKPASS="/tmp/askpass" setsid ssh-add /tmp/git_deploy_key </dev/null
+
       # if test passed, try release, but end true for no release needed
       - run: npm run semantic-release
 
