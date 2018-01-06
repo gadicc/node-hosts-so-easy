@@ -83,10 +83,24 @@ describe('hosts', () => {
         expect(hosts.modify(orig)).toBe(desired);
       });
 
-      it('removes a single hostname from any IP', () => {
+      it('removes a single hostname from any IP via removeHost', () => {
         const orig = '127.0.0.1 localhost admin';
         const desired = '127.0.0.1 localhost';
         hosts.removeHost('admin');
+        expect(hosts.modify(orig)).toBe(desired);
+      });
+
+      it('removes a single hostname from any IP via remove("*", hostname)', () => {
+        const orig = '127.0.0.1 localhost admin';
+        const desired = '127.0.0.1 localhost';
+        hosts.remove('*', 'admin');
+        expect(hosts.modify(orig)).toBe(desired);
+      });
+
+      it('removes an arary of hostnames from any IP via remove("*", hostname)', () => {
+        const orig = '127.0.0.1 localhost admin admin2';
+        const desired = '127.0.0.1 localhost';
+        hosts.remove('*', ['admin', 'admin2']);
         expect(hosts.modify(orig)).toBe(desired);
       });
 
@@ -108,6 +122,18 @@ describe('hosts', () => {
         expect(() => {
           hosts.remove('127.0.0.1', {});
         }).toThrow('expects `host`');
+      });
+
+      it('remove("*", host) throws on invalid host arg', () => {
+        expect(() => {
+          hosts.remove('*', {});
+        }).toThrow('expects `host`');
+      });
+
+      it('remove("*", "*") to throws', () => {
+        expect(() => {
+          hosts.remove('*', '*');
+        }).toThrow("hosts.remove('*', '*') not allowed");
       });
 
       it('remove a host after * works as expected', () => {

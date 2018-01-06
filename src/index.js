@@ -98,7 +98,18 @@ class Hosts extends EventEmitter {
     if (queue.remove[ip] === '*')
       return;
 
-    if (host === '*')
+    if (ip === '*') {
+
+      if (host === '*')
+        throw new Error("hosts.remove('*', '*') not allowed.  Be more specific.");
+      else if (typeof host === 'string')
+        this.queue.removeHost[host] = true;
+      else if (isArray(host))
+        host.forEach(host => this.queue.removeHost[host] = true);
+      else throw new Error("hosts.remove('*', host) expects `host` to be a string or " +
+        `array of strings, not ${typeof host}: ` + JSON.stringify(host));
+
+    } else if (host === '*')
       queue.remove[ip] = '*';
     else if (typeof host === 'string')
       queue.remove[ip].push(host);

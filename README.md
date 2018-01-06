@@ -42,7 +42,8 @@ for (let i = 2; i < 10; i++)
 hosts.remove('192.168.2.1', '*');
 hosts.remove('192.168.3.1', 'vhost20');
 hosts.remove('192.168.4.1', [ 'mongo', 'db' ]);
-hosts.removeHost('unwantedHost');
+hosts.remove('*', 'unwantedHost');
+hosts.remove('*', [ 'unwantedHost1', 'unwantedHost2' ]);
 
 // callback/promise after all changes synced in a single write
 await hosts.updateFinish();
@@ -97,14 +98,16 @@ const hosts = new Hosts({
   Run the given callback on every event occurrence, or just once when the event
   next occurs.  See EVENTS, below.
 
-* `hosts.remove(ip, host || [host1,host2] || '*')`
+* `hosts.remove(ip || '*', host || [host1,host2] || '*')`
 
   For the given IP, remove the given host or all the hosts in the array.
-  Alternatively, give a "host" of `*` to remove the entire line.
+  Alternatively, give a "host" of `*` to remove the entire line, or an
+  "ip" of `*` to remove the given host(s) from any IP.
 
 * `hosts.removeHost(host)`
 
   Remove all references of `host`, regardless of which IP it resolves to.
+  This has the same effect as `hosts.remove('*', host)`.
 
 * `hosts.updateFinish([callback])`
 
