@@ -1,6 +1,6 @@
 {
   "name": "hosts-so-easy",
-  "version": "0.0.0-development",
+  "version": "1.2.0",
   "description": "Safe, parallel API for manipulating /etc/hosts",
   "main": "lib/index.js",
   "repository": {

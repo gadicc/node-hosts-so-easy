@@ -1,3 +1,11 @@
+<a name="1.2.0"></a>
+# [1.2.0](https://github.com/gadicc/node-hosts-so-easy/compare/v1.1.5...v1.2.0) (2018-01-06)
+
+
+### Features
+
+* **remove:** remove('*', host) now works like removeHost(host). ([65bf8c3](https://github.com/gadicc/node-hosts-so-easy/commit/65bf8c3))
+
 # Changelog
 All notable changes to this project will be documented in this file.
 
