@@ -169,7 +169,6 @@ class Hosts extends EventEmitter {
 
       // removeHost
       hosts = hosts.filter(x => !queue.removeHost[x]);
-      queue.removeHost = {};
 
       if (queue.add[ip]) {
         hosts = hosts.concat(queue.add[ip].filter(x => !hosts.includes(x)));

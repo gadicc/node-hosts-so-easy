@@ -90,6 +90,14 @@ describe('hosts', () => {
         expect(hosts.modify(orig)).toBe(desired);
       });
 
+      it('removes a single hostname from all matching IP via removeHost', () => {
+        // this isn't a valid hostsfile but we should be able to fix it.
+        const orig = '127.0.0.1 localhost admin\n127.0.0.2 localhost2 admin';
+        const desired = '127.0.0.1 localhost\n127.0.0.2 localhost2';
+        hosts.removeHost('admin');
+        expect(hosts.modify(orig)).toBe(desired);
+      });
+
       it('removes a single hostname from any IP via remove("*", hostname)', () => {
         const orig = '127.0.0.1 localhost admin';
         const desired = '127.0.0.1 localhost';
