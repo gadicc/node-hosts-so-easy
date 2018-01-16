@@ -222,7 +222,7 @@ class Hosts extends EventEmitter {
 
     this.clearQueue();
 
-    return arr.join(this.config.EOL);
+    return arr.filter(x => x !== undefined).join(this.config.EOL);
   }
 
   _runUpdateFinishCallbacks(err) {

@@ -114,7 +114,14 @@ describe('hosts', () => {
 
       it('can remove all hosts / an entire line', () => {
         const orig = '127.0.0.1 localhost\n127.0.0.2 localhost2 localhost3';
-        const desired = '127.0.0.1 localhost\n';
+        const desired = '127.0.0.1 localhost';
+        hosts.remove('127.0.0.2', '*');
+        expect(hosts.modify(orig)).toBe(desired);
+      });
+
+      it('can remove all hosts should remove the line too', () => {
+        const orig = '127.0.0.1 localhost\n127.0.0.2 localhost2\n\n# end';
+        const desired = '127.0.0.1 localhost\n\n# end';
         hosts.remove('127.0.0.2', '*');
         expect(hosts.modify(orig)).toBe(desired);
       });
@@ -146,7 +153,7 @@ describe('hosts', () => {
 
       it('remove a host after * works as expected', () => {
         const orig = '127.0.0.1 localhost\n127.0.0.2 localhost2 localhost3';
-        const desired = '127.0.0.1 localhost\n';
+        const desired = '127.0.0.1 localhost';
         hosts.remove('127.0.0.2', '*');
         hosts.remove('127.0.0.2', 'localhost3');
         expect(hosts.modify(orig)).toBe(desired);
