@@ -210,8 +210,10 @@ class Hosts extends EventEmitter {
         startIndex--;
 
       // i.e. if header && !headerLine, insert the header over here
-      if (header)
-        arr.splice(startIndex, 0, header, '');
+      if (header) {
+        arr.splice(++startIndex, 0, '', header);
+        ++startIndex;
+      }
     }
 
     // TODO: try mimic preceeding whitespace pattern?

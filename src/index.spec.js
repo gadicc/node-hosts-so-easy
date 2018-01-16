@@ -1,5 +1,5 @@
 import _fs from 'fs';
-import util from 'util';
+import path from 'path';
 
 import pify from 'pify';
 import _tmp from 'tmp';
@@ -206,12 +206,24 @@ describe('hosts', () => {
 
       it('create a new header section if it does not exist', () => {
         const   hosts = new Hosts({ noWrites: true, header: 'test' });
-        const    orig = '127.0.0.1 localhost\n\n192.168.0.1 other';
-        const desired = '127.0.0.1 localhost\n\n# test\n127.0.0.2 localhost2\n\n192.168.0.1 other';
+        const    orig = '127.0.0.1 localhost';
+        const desired = '127.0.0.1 localhost\n\n# test\n127.0.0.2 localhost2';
         hosts.add('127.0.0.2', 'localhost2');
         expect(hosts.modify(orig)).toBe(desired);
       });
 
+    });
+
+    describe('fixtures', () => {
+
+      it('adds two hosts in a header section to archlinux hosts file', async () => {
+        const hosts = new Hosts({ noWrites: true, header: 'header' });
+        const orig = (await fs.readFile(path.join('tests', 'fixtures', 'hosts_archlinux'))).toString();
+        const desired = (await fs.readFile(path.join('tests', 'fixtures', 'hosts_archlinux_out'))).toString();
+        hosts.add('192.168.0.1', 'host1');
+        hosts.add('192.168.0.2', 'host2');
+        expect(hosts.modify(orig)).toBe(desired);
+      });
 
     });
 
