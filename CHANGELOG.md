@@ -1,3 +1,11 @@
+<a name="1.2.1"></a>
+## [1.2.1](https://github.com/gadicc/node-hosts-so-easy/compare/9898bb01cb105879fb0f1cd69dc56a4deee2f73e...v1.2.1) (2018-01-16)
+
+
+### Bug Fixes
+
+* **header:** fix header insert location ([d3eeb91](https://github.com/gadicc/node-hosts-so-easy/commit/d3eeb91))
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/gadicc/node-hosts-so-easy/compare/v1.1.5...v1.2.0) (2018-01-06)
 
