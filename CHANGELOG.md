@@ -1,3 +1,11 @@
+<a name="1.2.2"></a>
+## [1.2.2](https://github.com/gadicc/node-hosts-so-easy/compare/d3eeb912f9d55c291e207873c80602ac0536ac1d...v1.2.2) (2018-01-16)
+
+
+### Bug Fixes
+
+* **modify:** cleanup line when removing an entire hostline ([a520ed4](https://github.com/gadicc/node-hosts-so-easy/commit/a520ed4))
+
 <a name="1.2.1"></a>
 ## [1.2.1](https://github.com/gadicc/node-hosts-so-easy/compare/9898bb01cb105879fb0f1cd69dc56a4deee2f73e...v1.2.1) (2018-01-16)
 
