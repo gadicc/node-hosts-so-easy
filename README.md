@@ -47,6 +47,7 @@ hosts.remove('*', [ 'unwantedHost1', 'unwantedHost2' ]);
 
 // callback/promise after all changes synced in a single write
 await hosts.updateFinish();
+hosts.updateFinish().then(function() { ... }).catch(function(err) { ... });
 hosts.updateFinish(callback);
 hosts.on('updateFinish', callback);
 hosts.once('updateFinish', callback);
