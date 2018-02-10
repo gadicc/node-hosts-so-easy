@@ -38,7 +38,7 @@
     "@semantic-release/npm": "3.0.2",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
-    "babel-eslint": "8.0.3",
+    "babel-eslint": "8.2.1",
     "babel-preset-env": "1.6.1",
     "commitizen": "2.9.6",
     "condition-circle": "2.0.1",
