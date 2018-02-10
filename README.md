@@ -8,7 +8,6 @@
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 [![NSP Status](https://nodesecurity.io/orgs/gadi-personal/projects/f0ac8a50-c9e0-488c-8265-231695ad306d/badge)](https://nodesecurity.io/orgs/gadi-personal/projects/f0ac8a50-c9e0-488c-8265-231695ad306d)
 [![dependencies](https://david-dm.org/gadicc/node-hosts-so-easy.svg)](https://david-dm.org/gadicc/node-hosts-so-easy)
-[![Greenkeeper badge](https://badges.greenkeeper.io/gadicc/node-hosts-so-easy.svg)](https://greenkeeper.io/)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=plastic)](https://github.com/semantic-release/semantic-release)
 
