@@ -8,6 +8,7 @@
     "url": "https://github.com/gadicc/node-hosts-so-easy"
   },
   "keywords": [
+    "/etc/hosts",
     "hosts",
     "hostfile",
     "hostsfile"
