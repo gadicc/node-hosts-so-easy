@@ -1,3 +1,11 @@
+<a name="1.2.3"></a>
+## [1.2.3](https://github.com/gadicc/node-hosts-so-easy/compare/2a61e5137a724276db367e804f9f0accc407c901...v1.2.3) (2018-02-13)
+
+
+### Bug Fixes
+
+* all arguments of all functions (and config) are now validated ([fb57949](https://github.com/gadicc/node-hosts-so-easy/commit/fb57949))
+
 <a name="1.2.2"></a>
 ## [1.2.2](https://github.com/gadicc/node-hosts-so-easy/compare/d3eeb912f9d55c291e207873c80602ac0536ac1d...v1.2.2) (2018-01-16)
 
