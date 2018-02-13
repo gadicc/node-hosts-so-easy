@@ -53,9 +53,19 @@ class Hosts extends EventEmitter {
 
     if (options) {
       for (const key in options) {
-        if (typeof config[key] !== 'undefined')
-          config[key] = options[key];
-        else
+        if (typeof config[key] !== 'undefined') {
+          if (key === 'header' && typeof options[key] !== 'boolean'
+              && typeof options[key] !== 'string')
+            throw new Error('new Hosts(options) key `header` should be a '
+              + `boolean or string but got `
+              + `a ${typeof options[key]}: ` + JSON.stringify(options[key]));
+          else if (key !== 'header' && typeof config[key] !== typeof options[key])
+            throw new Error('new Hosts(options) key `' + key + '` expects '
+              + `a ${typeof config[key]} like ${config[key]} but got `
+              + `a ${typeof options[key]}: ` + JSON.stringify(options[key]));
+          else
+            config[key] = options[key];
+        } else
           throw new Error("No such config option: " + key);
       }
     }
@@ -74,6 +84,10 @@ class Hosts extends EventEmitter {
   add(ip, host) {
     const queue = this.queue;
 
+    if (typeof ip !== 'string')
+      throw new Error('hosts.add(ip, host) expects `ip` to be a string, not '
+        + (typeof ip) + ': ' + JSON.stringify(ip));
+
     if (!queue.add[ip])
       queue.add[ip] = [];
 
@@ -82,14 +96,18 @@ class Hosts extends EventEmitter {
     else if (isArray(host))
       queue.add[ip] = queue.add[ip].concat(host);
     else
-      throw new Error('hosts.add(ip, host) expects `host` to be a string or array of ' +
-        `strings, not ${typeof host}: ` + JSON.stringify(host));
+      throw new Error('hosts.add(ip, host) expects `host` to be a string or '
+        + `array of strings, not ${typeof host}: ` + JSON.stringify(host));
 
     this._queueUpdate();
   }
 
   remove(ip, host) {
     const queue = this.queue;
+
+    if (typeof ip !== 'string')
+      throw new Error('hosts.remove(ip, host) expects `ip` to be a string, '
+        + `${typeof ip}: ` + JSON.stringify(ip));
 
     if (!queue.remove[ip])
       queue.remove[ip] = [];
@@ -106,8 +124,9 @@ class Hosts extends EventEmitter {
         this.queue.removeHost[host] = true;
       else if (isArray(host))
         host.forEach(host => this.queue.removeHost[host] = true);
-      else throw new Error("hosts.remove('*', host) expects `host` to be a string or " +
-        `array of strings, not ${typeof host}: ` + JSON.stringify(host));
+      else throw new Error("hosts.remove('*', host) expects `host` to be a "
+        + `string or array of strings, not ${typeof host}: `
+        + JSON.stringify(host));
 
     } else if (host === '*')
       queue.remove[ip] = '*';
@@ -116,13 +135,17 @@ class Hosts extends EventEmitter {
     else if (isArray(host))
       queue.remove[ip] = queue.remove[ip].concat(host);
     else
-      throw new Error('hosts.remove(ip, host) expects `host` to be a string or array of ' +
-        `strings, not ${typeof host}: ` + JSON.stringify(host));
+      throw new Error('hosts.remove(ip, host) expects `host` to be a string or '
+        + `array of strings, not ${typeof host}: ` + JSON.stringify(host));
 
     this._queueUpdate();
   }
 
   removeHost(host) {
+    if (typeof host !== 'string')
+      throw new Error('hosts.removeHost(host) expects `host` to be a string, '
+        + `not ${typeof host}: ` + JSON.stringify(host));
+
     this.queue.removeHost[host] = true;
     this._queueUpdate();
   }
@@ -134,9 +157,17 @@ class Hosts extends EventEmitter {
   }
 
   updateFinish(callback) {
-    if (callback)
-      this.updateFinishCallbacks.push(callback);
-    else
+    if (callback) {
+
+      if (typeof callback === 'function')
+        this.updateFinishCallbacks.push(callback);
+      else
+        throw new Error('hosts.updateFinish(callback) expects `callback` to '
+          + `be a function, not ${typeof callback}: `
+          + JSON.stringify(callback));
+
+    } else {
+
       return new Promise((resolve, reject) => {
         this.updateFinishCallbacks.push(function(err) {
           if (err)
@@ -144,6 +175,8 @@ class Hosts extends EventEmitter {
           resolve();
         });
       });
+
+    }
   }
 
   /* --- INTERNAL API --- */

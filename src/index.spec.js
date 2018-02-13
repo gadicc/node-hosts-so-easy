@@ -13,6 +13,17 @@ describe('hosts', () => {
 
   const hosts = new Hosts({ noWrites: true });
 
+  describe('init / config', () => {
+
+    it('throws on invalid arguments', () => {
+      // specific keys
+      expect(() => new Hosts({ header: {} })).toThrow('key `header`');
+      // type mismatch
+      expect(() => new Hosts({ debounceTime: '500' })).toThrow('key `debounceTime`');
+    });
+
+  });
+
   describe('modify', () => {
 
     beforeEach(() => {
@@ -41,6 +52,12 @@ describe('hosts', () => {
         const desired = '127.0.0.1 localhost localhost2 localhost3';
         hosts.add('127.0.0.1', ['localhost2', 'localhost3']);
         expect(hosts.modify(orig)).toBe(desired);
+      });
+
+      it('add() throws on invalid ip arg', () => {
+        expect(() => {
+          hosts.add({});
+        }).toThrow('expects `ip`');
       });
 
       it('add() throws on invalid host arg', () => {
@@ -98,6 +115,12 @@ describe('hosts', () => {
         expect(hosts.modify(orig)).toBe(desired);
       });
 
+      it('removeHost(host) throws on invalid host arg', () => {
+        expect(() => {
+          hosts.removeHost({});
+        }).toThrow('expects `host`');
+      });
+
       it('removes a single hostname from any IP via remove("*", hostname)', () => {
         const orig = '127.0.0.1 localhost admin';
         const desired = '127.0.0.1 localhost';
@@ -131,6 +154,12 @@ describe('hosts', () => {
         const desired = '127.0.0.1 localhost localhost4';
         hosts.remove('127.0.0.1', ['localhost2', 'localhost3']);
         expect(hosts.modify(orig)).toBe(desired);
+      });
+
+      it('remove() throws on invalid ip arg', () => {
+        expect(() => {
+          hosts.remove({});
+        }).toThrow('expects `ip`');
       });
 
       it('remove() throws on invalid host arg', () => {
@@ -299,6 +328,12 @@ describe('hosts', () => {
           });
         });
       });
+    });
+
+    it('updateFinish(callback) throws on invalid callback arg', () => {
+      expect(() => {
+        hosts.updateFinish({});
+      }).toThrow('expects `callback`');
     });
 
     it('file is reread if it has changed', async () => {

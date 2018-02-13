@@ -129,7 +129,7 @@ const hosts = new Hosts({
 ## Sample output (formatting preserved)
 
 ```js
-const hosts = new Hosts({ header: 'hosts-so-easy' });
+const hosts = new Hosts({ header: 'optional header' });
 ```
 
 ```
@@ -141,7 +141,7 @@ const hosts = new Hosts({ header: 'hosts-so-easy' });
 127.0.0.1       localhost.localdomain   localhost
 ::1             localhost.localdomain   localhost
 
-# hosts-so-easy
+# optional header
 172.20.0.2 host2
 172.20.0.3 host3
 
@@ -153,7 +153,7 @@ const hosts = new Hosts({ header: 'hosts-so-easy' });
   * [X] Ability to turn off atomic writes
   * [X] Maintain a header block (put hosts in same section)
   * [X] EventEmitter for writes
-  * [ ] Validate arguments, throw on invalid
+  * [X] Validate arguments, throw on invalid
 
 ## Wishlist
 
