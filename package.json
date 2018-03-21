@@ -46,7 +46,7 @@
     "coveralls": "3.0.0",
     "cz-conventional-changelog": "2.1.0",
     "eslint": "4.19.0",
-    "jest": "22.4.2",
+    "jest": "22.4.3",
     "nodemon": "1.17.2",
     "pify": "3.0.0",
     "semantic-release": "15.1.3",
