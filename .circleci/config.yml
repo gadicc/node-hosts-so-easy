@@ -27,7 +27,7 @@ jobs:
 
   coverage_test_publish:
     docker:
-      - image: circleci/node:latest@sha256:108bab14440396d5e73a9149eb38cf30f3c39f67e93d701b508fd7ef8adcd78a
+      - image: circleci/node:latest@sha256:1827e439da2b28b55948418db6037a926b1a5a407cb1352b0692203e8bab79c9
     working_directory: ~/repo
     steps:
       - checkout
