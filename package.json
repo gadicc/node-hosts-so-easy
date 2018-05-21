@@ -49,7 +49,7 @@
     "jest": "22.4.4",
     "nodemon": "1.17.4",
     "pify": "3.0.0",
-    "semantic-release": "15.4.2",
+    "semantic-release": "15.4.3",
     "tmp": "0.0.33"
   },
   "config": {
