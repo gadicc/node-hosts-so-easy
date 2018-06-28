@@ -1,3 +1,11 @@
+<a name="1.2.4"></a>
+## [1.2.4](https://github.com/gadicc/node-hosts-so-easy/compare/v1.2.3...v1.2.4) (2018-06-28)
+
+
+### Bug Fixes
+
+* **package:** bump lodash, fixes Prototype Pollution vulnerability. ([de58c24](https://github.com/gadicc/node-hosts-so-easy/commit/de58c24))
+
 <a name="1.2.3"></a>
 ## [1.2.3](https://github.com/gadicc/node-hosts-so-easy/compare/2a61e5137a724276db367e804f9f0accc407c901...v1.2.3) (2018-02-13)
 
