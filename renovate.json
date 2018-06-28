@@ -1,7 +1,8 @@
 {
   "automerge": true,
   "extends": [
-    "config:base"
+    "config:base",
+    "default:pinDigestsDisabled"
   ],
   "major": {
     "automerge": false
