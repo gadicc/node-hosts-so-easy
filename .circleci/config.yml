@@ -6,7 +6,7 @@ version: 2
 jobs:
   test_min_node_version:
     docker:
-      - image: circleci/node:6@sha256:88b506e355df639e54909904aab9fbbe5dd0a66134625788e4ddf81a3405ee5e
+      - image: circleci/node:6@sha256:d1d4b09dd9834f8e91a5628c85b5a9b73dd8a18cd32ec1d7a340545f0e90c12b
       # https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
     working_directory: ~/repo
