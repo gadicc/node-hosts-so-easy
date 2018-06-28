@@ -38,7 +38,7 @@
     "@semantic-release/github": "4.2.18",
     "@semantic-release/npm": "3.3.4",
     "babel-cli": "6.26.0",
-    "babel-core": "6.26.0",
+    "babel-core": "6.26.3",
     "babel-eslint": "8.2.5",
     "babel-preset-env": "1.7.0",
     "commitizen": "2.10.1",
