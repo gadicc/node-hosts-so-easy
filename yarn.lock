@@ -2557,18 +2557,17 @@ git-up@^2.0.0:
     is-ssh "^1.3.0"
     parse-url "^1.3.0"
 
+git-url-parse@^10.0.1:
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/git-url-parse/-/git-url-parse-10.0.1.tgz#75f153b24ac7297447fc583cf9fac23a5ae687c1"
+  dependencies:
+    git-up "^2.0.0"
+
 git-url-parse@^7.0.1:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/git-url-parse/-/git-url-parse-7.0.1.tgz#1a3dffc6eaa9e3634deedc58e20d9e33106d3d41"
   dependencies:
     git-up "^2.0.0"
-
-git-url-parse@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/git-url-parse/-/git-url-parse-9.0.0.tgz#a82a36acc3544c77ed0984d6488b37fbcfbec24d"
-  dependencies:
-    git-up "^2.0.0"
-    parse-domain "^2.0.0"
 
 github@^13.0.0:
   version "13.0.1"
@@ -4560,10 +4559,6 @@ pad-right@^0.2.2:
   dependencies:
     repeat-string "^1.5.2"
 
-parse-domain@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/parse-domain/-/parse-domain-2.0.0.tgz#e9f42f697c30f7c2051dc5c55ff4d8a80da7943c"
-
 parse-github-url@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/parse-github-url/-/parse-github-url-1.0.2.tgz#242d3b65cbcdda14bb50439e3242acf6971db395"
@@ -5215,9 +5210,9 @@ sax@^1.2.1:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
 
-semantic-release@15.7.1:
-  version "15.7.1"
-  resolved "https://registry.yarnpkg.com/semantic-release/-/semantic-release-15.7.1.tgz#636337219fad33cfcf35dfe86d8d0a9dc9ee6c35"
+semantic-release@15.7.2:
+  version "15.7.2"
+  resolved "https://registry.yarnpkg.com/semantic-release/-/semantic-release-15.7.2.tgz#e79949d6dffd07a80bb3cefa1601df48ed08e8c7"
   dependencies:
     "@semantic-release/commit-analyzer" "^5.0.0"
     "@semantic-release/error" "^2.2.0"
@@ -5233,7 +5228,7 @@ semantic-release@15.7.1:
     find-versions "^2.0.0"
     get-stream "^3.0.0"
     git-log-parser "^1.2.0"
-    git-url-parse "^9.0.0"
+    git-url-parse "^10.0.1"
     hook-std "^1.0.1"
     hosted-git-info "^2.7.1"
     lodash "^4.17.4"
