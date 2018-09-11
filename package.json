@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@semantic-release/changelog": "3.0.0",
-    "@semantic-release/git": "7.0.3",
+    "@semantic-release/git": "7.0.4",
     "@semantic-release/github": "5.0.5",
     "@semantic-release/npm": "5.0.4",
     "babel-cli": "6.26.0",
