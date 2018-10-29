@@ -47,7 +47,7 @@
     "cz-conventional-changelog": "2.1.0",
     "eslint": "5.7.0",
     "jest": "23.6.0",
-    "nodemon": "1.18.4",
+    "nodemon": "1.18.5",
     "pify": "4.0.1",
     "semantic-release": "15.10.5",
     "tmp": "0.0.33"
