@@ -4,7 +4,7 @@ import atomicWrite from 'atomic-write';
 import debounce from 'lodash/debounce';
 import EventEmitter from 'eventemitter3';
 
-const win = process.env === 'win32';
+const win = process.platform === 'win32';
 /* istanbul ignore next */
 const DEFAULT_EOL = win ? '\r\n' : '\n';
 /* istanbul ignore next */
