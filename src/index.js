@@ -1,7 +1,6 @@
 import fs from 'fs';
 
 import atomicWrite from 'atomic-write';
-import debounce from 'lodash/debounce';
 import EventEmitter from 'eventemitter3';
 
 const win = process.platform === 'win32';
@@ -9,6 +8,15 @@ const win = process.platform === 'win32';
 const DEFAULT_EOL = win ? '\r\n' : '\n';
 /* istanbul ignore next */
 const DEFAULT_HOSTS = win ? 'C:/Windows/System32/drivers/etc/hosts' : '/etc/hosts';
+
+function debounce(func, delay) {
+  let timeout;
+  return function() {
+    clearTimeout(timeout);
+    const args = arguments, that = this;
+    timeout = setTimeout(() => func.apply(that,args), delay);
+  }
+}
 
 /* istanbul ignore next */
 const isArray = Array.isArray ||
