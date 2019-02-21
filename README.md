@@ -6,7 +6,7 @@
 [![Circle CI](https://circleci.com/gh/gadicc/node-hosts-so-easy.svg?style=shield)](https://circleci.com/gh/gadicc/node-hosts-so-easy)
 [![Coverage Status](https://coveralls.io/repos/github/gadicc/node-hosts-so-easy/badge.svg?branch=master)](https://coveralls.io/github/gadicc/node-hosts-so-easy?branch=master)
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
-[![NSP Status](https://nodesecurity.io/orgs/gadi-personal/projects/f0ac8a50-c9e0-488c-8265-231695ad306d/badge)](https://nodesecurity.io/orgs/gadi-personal/projects/f0ac8a50-c9e0-488c-8265-231695ad306d)
+[![Known Vulnerabilities](https://snyk.io/test/github/gadicc/hosts-so-easy/badge.svg?targetFile=package.json)](https://snyk.io/test/github/gadicc/hosts-so-easy?targetFile=package.json)
 [![dependencies](https://david-dm.org/gadicc/node-hosts-so-easy.svg)](https://david-dm.org/gadicc/node-hosts-so-easy)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=plastic)](https://github.com/semantic-release/semantic-release)
