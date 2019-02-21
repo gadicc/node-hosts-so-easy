@@ -40,7 +40,7 @@
     "babel-core": "6.26.3",
     "babel-eslint": "10.0.1",
     "babel-preset-env": "1.7.0",
-    "commitizen": "3.0.6",
+    "commitizen": "3.0.7",
     "condition-circle": "2.0.2",
     "coveralls": "3.0.2",
     "cz-conventional-changelog": "2.1.0",
