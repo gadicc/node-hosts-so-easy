@@ -33,9 +33,9 @@
   },
   "devDependencies": {
     "@semantic-release/changelog": "3.0.4",
-    "@semantic-release/git": "7.0.13",
+    "@semantic-release/git": "7.0.14",
     "@semantic-release/github": "5.4.0",
-    "@semantic-release/npm": "5.1.12",
+    "@semantic-release/npm": "5.1.13",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.3",
     "babel-eslint": "10.0.2",
@@ -48,7 +48,7 @@
     "jest": "24.8.0",
     "nodemon": "1.19.1",
     "pify": "4.0.1",
-    "semantic-release": "15.13.17",
+    "semantic-release": "15.13.18",
     "tmp": "0.1.0"
   },
   "config": {
