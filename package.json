@@ -43,7 +43,7 @@
     "commitizen": "3.1.2",
     "condition-circle": "2.0.2",
     "coveralls": "3.0.9",
-    "cz-conventional-changelog": "2.1.0",
+    "cz-conventional-changelog": "3.0.2",
     "eslint": "5.16.0",
     "jest": "24.9.0",
     "nodemon": "1.19.4",
