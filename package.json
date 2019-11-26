@@ -42,7 +42,7 @@
     "babel-preset-env": "1.7.0",
     "commitizen": "3.1.2",
     "condition-circle": "2.0.2",
-    "coveralls": "3.0.8",
+    "coveralls": "3.0.9",
     "cz-conventional-changelog": "2.1.0",
     "eslint": "5.16.0",
     "jest": "24.9.0",
