@@ -1,3 +1,10 @@
+## [1.2.8](https://github.com/gadicc/node-hosts-so-easy/compare/v1.2.7...v1.2.8) (2019-12-12)
+
+
+### Bug Fixes
+
+* **deps:** Upgrade all deps to latest. ([5b710a9](https://github.com/gadicc/node-hosts-so-easy/commit/5b710a9b2b0d128977ec5f0abe5cd87e53a89979))
+
 ## [1.2.7](https://github.com/gadicc/node-hosts-so-easy/compare/v1.2.6...v1.2.7) (2019-12-11)
 
 
