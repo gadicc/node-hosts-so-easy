@@ -30,7 +30,7 @@ function arrayJoinFunc(arr, separatorFunc) {
 
 function noop() {}
 
-function ifErrThrow(err) {
+const ifErrThrow = (err) => {
   /* istanbul ignore next */
   if (err)
     throw err;
@@ -84,7 +84,7 @@ class Hosts extends EventEmitter {
 
     this._queueUpdate = config.noWrites
       ? noop
-      : debounce(this._update.bind(this, ifErrThrow), config.debounceTime);
+      : debounce(this._update(ifErrThrow), config.debounceTime);
 
     this.on('updateFinish', this._runUpdateFinishCallbacks.bind(this));
   }
