@@ -57,6 +57,9 @@
     }
   },
   "release": {
+    "//branchANDbranches": "https://github.com/bahmutov/condition-circle/issues/22",
+    "branch": "master",
+    "branches": "master",
     "verifyConditions": [
       "condition-circle"
     ],

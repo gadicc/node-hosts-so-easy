@@ -25,7 +25,7 @@ jobs:
       # run tests against our npm build (on minimum node version)
       - run: yarn build && yarn test-dist
 
-  coverage_test_publish:
+  test_latest_coverage:
     docker:
       - image: circleci/node:latest
     working_directory: ~/repo
@@ -47,6 +47,24 @@ jobs:
       # run tests against our npm build (on this node version too)
       - run: yarn build && yarn test-dist
 
+
+  publish:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run: yarn install --ignore-engines
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run: yarn build
+
       - run:
           name: Setup SSH with decrypted deploy key
           command: |
@@ -64,9 +82,14 @@ jobs:
       # if test passed, try release, but end true for no release needed
       - run: npm run semantic-release
 
+
 workflows:
   version: 2
   default:
     jobs:
       - test_min_node_version
-      - coverage_test_publish
+      - test_latest_coverage
+      - publish:
+          requires:
+            - test_min_node_version
+            - test_latest_coverage
