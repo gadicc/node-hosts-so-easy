@@ -1,3 +1,10 @@
+## [1.2.9](https://github.com/gadicc/node-hosts-so-easy/compare/v1.2.8...v1.2.9) (2021-01-10)
+
+
+### Bug Fixes
+
+* **tests:** bump minimum node version from 6 to 10. ([995b5a1](https://github.com/gadicc/node-hosts-so-easy/commit/995b5a1e79ab6deaf31e212c2ada0940cf4e0336))
+
 ## [1.2.8](https://github.com/gadicc/node-hosts-so-easy/compare/v1.2.7...v1.2.8) (2019-12-12)
 
 
