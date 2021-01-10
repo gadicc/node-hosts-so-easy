@@ -13,7 +13,7 @@
 
 Copyright (c) 2017 by Gadi Cohen.  Released under the MIT license.
 
-Note: we support and run tests against Node.js 6.0.0 (2016-04-26).
+Note: we support and run tests against latest Node, and Node v10 LTS (as of 2021-01-10).
 
 ## Features
 
