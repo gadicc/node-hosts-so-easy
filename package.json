@@ -1,8 +1,9 @@
 {
   "name": "hosts-so-easy",
   "version": "1.2.9",
-  "description": "Safe, parallel API for manipulating /etc/hosts",
+  "description": "Edit /etc/hosts safely, preserving its formatting",
   "main": "./src/index.cjs",
+  "types": "./src/index.d.cts",
   "repository": {
     "type": "git",
     "url": "https://github.com/gadicc/node-hosts-so-easy"
@@ -15,18 +16,15 @@
   ],
   "author": "Gadi Cohen <dragon@wastelands.net>",
   "license": "MIT",
-  "dependencies": {
-    "eventemitter3": "^5.0.4",
-    "write-file-atomic": "^8.0.0"
-  },
   "scripts": {
-    "test": "node --test src/*.test.js scripts/*.test.js",
-    "coverage": "c8 --check-coverage --lines 95 --functions 95 --branches 90 --reporter=text --reporter=lcov --reporter=html node --test src/*.test.js scripts/*.test.js",
+    "test": "node --test tests/*.test.js",
+    "coverage": "c8 --check-coverage --lines 95 --functions 95 --branches 90 --reporter=text --reporter=lcov --reporter=html node --test tests/*.test.js",
     "lint": "eslint .",
     "test:package": "node scripts/test-package.js",
-    "prepublishOnly": "npm run lint && npm run coverage && npm run test:package",
+    "prepublishOnly": "npm run lint && npm run coverage && npm run test:types && npm run test:release && npm run test:package",
     "semantic-release": "semantic-release",
-    "test:release": "node --test scripts/release.test.js"
+    "test:release": "node --test scripts/release.test.js",
+    "test:types": "tsc -p tests/types"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -35,27 +33,33 @@
     "@semantic-release/npm": "13.2.0",
     "@semantic-release/release-notes-generator": "14.1.1",
     "c8": "12.0.0",
+    "conventional-changelog-conventionalcommits": "9.3.1",
     "eslint": "10.14.0",
     "globals": "17.14.0",
     "semantic-release": "25.0.9",
-    "conventional-changelog-conventionalcommits": "9.3.1"
+    "typescript": "7.0.2"
   },
   "type": "module",
   "exports": {
     ".": {
-      "import": "./src/index.js",
-      "require": "./src/index.cjs"
+      "import": {
+        "types": "./src/index.d.ts",
+        "default": "./src/index.js"
+      },
+      "require": {
+        "types": "./src/index.d.cts",
+        "default": "./src/index.cjs"
+      }
     },
     "./package.json": "./package.json"
   },
   "files": [
-    "src/index.js",
-    "src/index.cjs",
+    "src",
     "CHANGELOG.md",
     "LICENSE.txt"
   ],
   "engines": {
-    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+    "node": ">=22"
   },
   "c8": {
     "include": [

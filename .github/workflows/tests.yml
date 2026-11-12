@@ -30,4 +30,6 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run lint
       - run: npm run coverage
+      - run: npm run test:types
+      - run: npm run test:release
       - run: npm run test:package

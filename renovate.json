@@ -1,7 +1,9 @@
 {
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    "helpers:pinGitHubActionDigests"
   ],
+  "minimumReleaseAge": "7 days",
   "automerge": true,
   "packageRules": [
     {

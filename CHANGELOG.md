@@ -1,3 +1,6 @@
+Releases from 2.0.0 onwards are described in the
+[GitHub releases](https://github.com/gadicc/node-hosts-so-easy/releases).
+
 ## [1.2.9](https://github.com/gadicc/node-hosts-so-easy/compare/v1.2.8...v1.2.9) (2021-01-10)
 
 

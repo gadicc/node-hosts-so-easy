@@ -1,4 +1,5 @@
 import Hosts from './index.cjs';
 
-export const noop = Hosts.noop;
+export const { HostsDocument, HostsConflictError } = Hosts;
+export { Hosts };
 export default Hosts;
