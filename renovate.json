@@ -1,10 +1,14 @@
 {
-  "automerge": true,
   "extends": [
-    "config:base",
-    "default:pinDigestsDisabled"
+    "config:recommended"
   ],
-  "major": {
-    "automerge": false
-  }
+  "automerge": true,
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "automerge": false
+    }
+  ]
 }
