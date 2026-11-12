@@ -220,10 +220,10 @@ native modules, Node tests, GitHub Actions, and `package-lock.json`.
 
 ## Releases
 
-Pushes to `master` run the complete test matrix before semantic-release publishes
+Pushes to `main` run the complete test matrix before semantic-release publishes
 to npm and creates a GitHub release. Pull requests and other pushed branches run
 CI without publishing. A manually dispatched release also runs the test matrix
-and can only publish from `master`.
+and can only publish from `main`.
 
 Conventional commits determine the version: `fix:` is a patch, `feat:` is a
 minor, and `feat!:` or a `BREAKING CHANGE:` footer is a major. Tooling-only commits

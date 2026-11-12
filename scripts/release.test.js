@@ -7,7 +7,7 @@ import config from '../release.config.mjs';
 const context = {
   logger: { log() {} },
   options: { repositoryUrl: config.repositoryUrl },
-  branch: { name: 'master' },
+  branch: { name: 'main' },
   lastRelease: { version: '1.2.9', gitTag: 'v1.2.9' },
   nextRelease: { version: '2.0.0', gitTag: 'v2.0.0' },
 };

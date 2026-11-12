@@ -1,6 +1,6 @@
 /** @type {import('semantic-release').GlobalConfig} */
 export default {
-  branches: ['master'],
+  branches: ['main'],
   repositoryUrl: 'https://github.com/gadicc/node-hosts-so-easy',
   // Keep conventional-changelog-conventionalcommits on v9 until the notes
   // generator supports v10's writer interface; release.test.js checks notes.
