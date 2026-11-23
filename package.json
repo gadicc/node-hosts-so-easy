@@ -36,7 +36,7 @@
     "conventional-changelog-conventionalcommits": "9.3.1",
     "eslint": "10.14.0",
     "globals": "17.14.0",
-    "semantic-release": "25.0.9",
+    "semantic-release": "26.0.1",
     "typescript": "7.0.2"
   },
   "type": "module",
